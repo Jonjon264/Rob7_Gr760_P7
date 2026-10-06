@@ -1,0 +1,9 @@
+topics:
+  -
+    topic: /cmd_vel
+    type: geometry_msgs/msg/Twist
+    queue_size: 10
+  -
+    topic: /odom
+    type: nav_msgs/msg/Odometry
+    queue_size: 10
