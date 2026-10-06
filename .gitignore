@@ -193,6 +193,14 @@ log/
 bags/
 tf_trees/
 
+##ROS1##
+build_isolated/
+devel_isolated/
+install_isolated/
+install/
+build/
+devel/
+
 # Ignore generated docs
 *.dox
 *.wikidoc
