@@ -12,7 +12,7 @@ RUN apt update && \
 	    net-tools \
     	nano \
     	cmake \
-        pip \
+        python3-pip \
     	libpcl-dev \
         libeigen3-dev \
     	ros-humble-pcl-conversions \
@@ -28,6 +28,7 @@ RUN apt update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Install sentence transformers:
+RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir \
     torch \
     sentence-transformers==5.1.0
