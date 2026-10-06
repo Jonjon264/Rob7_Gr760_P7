@@ -1,0 +1,18 @@
+services:
+
+
+  humble_dev:
+    build:
+      context: ../..
+      dockerfile: ./Docker/Semantics/Dockerfile
+    container_name: Semantics
+    network_mode: host
+    ipc: host
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: ../../ros2_ws
+        target: /root/ros2_ws
+    environment:
+      - ROS_DOMAIN_ID=0
