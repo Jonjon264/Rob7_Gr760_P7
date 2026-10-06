@@ -10,6 +10,8 @@ services:
     volumes:
       - ./bridge/topics.yaml:/topics.yaml:ro
     restart: on-failure
+    extra_hosts:
+      - "ysc-perception:192.168.1.106"  
     command:
       - bash
       - -c

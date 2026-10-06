@@ -4,6 +4,18 @@ topics:
     type: geometry_msgs/msg/Twist
     queue_size: 10
   -
-    topic: /odom
-    type: nav_msgs/msg/Odometry
+    topic: /livox/imu_192_168_2_202
+    type: sensor_msgs/msg/Imu
+    queue_size: 10
+  -
+    topic: /livox/imu_192_168_2_203
+    type: sensor_msgs/msg/Imu
+    queue_size: 10
+  -
+    topic: /livox/imu_192_168_2_204
+    type: sensor_msgs/msg/Imu
+    queue_size: 10
+  -
+    topic: /livox/imu_192_168_2_205
+    type: sensor_msgs/msg/Imu
     queue_size: 10
