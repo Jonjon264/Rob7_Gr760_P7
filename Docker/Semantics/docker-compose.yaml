@@ -16,7 +16,7 @@ services:
         target: /root/ros2_ws
 
       - type: bind
-        source: ../../Rob7Git/Semantics-Py
+        source: ../../Semantics-Py
         target: /root/Semantics-Py
 
     environment:
