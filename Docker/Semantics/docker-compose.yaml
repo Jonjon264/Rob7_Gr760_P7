@@ -14,5 +14,10 @@ services:
       - type: bind
         source: ../../ros2_ws
         target: /root/ros2_ws
+
+      - type: bind
+        source: ../../Rob7Git/Semantics-Py
+        target: /root/Semantics-Py
+
     environment:
       - ROS_DOMAIN_ID=0
