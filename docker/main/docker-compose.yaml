@@ -2,7 +2,7 @@ services:
   humble_dev:
     build:
       context: ../..
-      dockerfile: ./docker/Main/Dockerfile
+      dockerfile: ./docker/main/Dockerfile
     container_name: x30_Main
     network_mode: host
     ipc: host
