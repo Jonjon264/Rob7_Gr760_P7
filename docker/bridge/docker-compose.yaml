@@ -8,7 +8,7 @@ services:
       - ROS_IP=192.168.1.131
       - ROS_DOMAIN_ID=0
     volumes:
-      - ./bridge/topics.yaml:/topics.yaml:ro
+      - ./config/topics.yaml:/topics.yaml:ro
     restart: on-failure
     extra_hosts:
       - "ysc-perception:192.168.1.106"  

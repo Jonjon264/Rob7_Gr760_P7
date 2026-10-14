@@ -3,7 +3,7 @@ services:
     build:
       context: ../..
       dockerfile: ./Docker/Main/Dockerfile
-    container_name: X30_Main
+    container_name: x30_Main
     network_mode: host
     ipc: host
     stdin_open: true
