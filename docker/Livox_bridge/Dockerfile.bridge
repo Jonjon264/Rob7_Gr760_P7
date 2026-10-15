@@ -1,0 +1,37 @@
+# Noetic and Foxy coexist on Ubuntu 20.04 in this official image.
+FROM ros:foxy-ros1-bridge
+SHELL ["/bin/bash", "-c"]
+ARG BUILD_JOBS=2 #doing a paralled build with 2 jobs 
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential git python3-colcon-common-extensions \
+    ros-foxy-rmw-cyclonedds-cpp \
+    && rm -rf /var/lib/apt/lists/*
+
+# Compile the robot's message layout for ROS 1.
+COPY interfaces/ros1/ /opt/livox/noetic_ws/src/livox_ros_driver2/
+COPY interfaces/msg/ /opt/livox/noetic_ws/src/livox_ros_driver2/msg/
+RUN source /opt/ros/noetic/setup.bash \
+    && cd /opt/livox/noetic_ws \
+    && catkin_make -j${BUILD_JOBS} -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+       -DCMAKE_INSTALL_PREFIX=/opt/livox/noetic install
+
+# Compile the same message layout for ROS 2.
+COPY interfaces/ros2/ /opt/livox/foxy_ws/src/livox_ros_driver2/
+COPY interfaces/msg/ /opt/livox/foxy_ws/src/livox_ros_driver2/msg/
+RUN source /opt/ros/foxy/setup.bash \
+    && cd /opt/livox/foxy_ws \
+    && CMAKE_BUILD_PARALLEL_LEVEL=${BUILD_JOBS} colcon build --merge-install \
+       --install-base /opt/livox/foxy --cmake-args -DBUILD_TESTING=OFF
+
+# Rebuild the bridge so it discovers the Livox types on both sides.
+RUN git clone --depth 1 --branch 0.9.7 https://github.com/ros2/ros1_bridge.git \
+       /opt/livox/bridge_ws/src/ros1_bridge \
+    && source /opt/ros/noetic/setup.bash \
+    && source /opt/livox/noetic/setup.bash \
+    && source /opt/ros/foxy/setup.bash \
+    && source /opt/livox/foxy/local_setup.bash \
+    && cd /opt/livox/bridge_ws \
+    && MAKEFLAGS=-j${BUILD_JOBS} CMAKE_BUILD_PARALLEL_LEVEL=${BUILD_JOBS} \
+       colcon build --merge-install --install-base /opt/livox/bridge \
+       --cmake-args -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release

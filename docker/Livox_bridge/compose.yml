@@ -1,0 +1,60 @@
+name: livox-mapping
+
+services:
+  # Robot ROS 1 messages -> workstation ROS 2 messages.
+  bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile.bridge
+    image: livox-mapping-bridge:local
+    init: true
+    network_mode: host
+    extra_hosts:
+      - "ysc-perception:${ROBOT_IP:-192.168.1.106}"
+    environment:
+      ROS_MASTER_URI: http://${ROBOT_IP:-192.168.1.106}:11311
+      # Required at bridge startup; loopback silently rejects robot publishers.
+      ROS_IP: ${ROS_IP:-}
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-31}
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      CYCLONEDDS_URI: file:///app/cyclonedds.xml
+    volumes:
+      - ./bridge_topics.yaml:/app/bridge_topics.yaml:ro
+      - ./cyclonedds.xml:/app/cyclonedds.xml:ro
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -e
+        : "$${ROS_IP:?Set ROS_IP to the workstation address on the robot network (README step 2)}"
+        echo "ROS_MASTER_URI=$${ROS_MASTER_URI} ROS_IP=$${ROS_IP} ROS_DOMAIN_ID=$${ROS_DOMAIN_ID}"
+        unset PYTHONPATH CMAKE_PREFIX_PATH AMENT_PREFIX_PATH COLCON_PREFIX_PATH LD_LIBRARY_PATH ROS_DISTRO
+        source /opt/ros/noetic/setup.bash
+        source /opt/livox/noetic/setup.bash
+        rosparam load /app/bridge_topics.yaml /livox_mapping
+        source /opt/ros/foxy/setup.bash
+        source /opt/livox/foxy/local_setup.bash
+        source /opt/livox/bridge/local_setup.bash
+        exec ros2 run ros1_bridge parameter_bridge /livox_mapping/topics /livox_mapping/services_1_to_2 /livox_mapping/services_2_to_1 __name:=livox_mapping_bridge
+
+  # Select one physical device; forward its CustomMsg without changing its fields.
+  select_lidar:
+    image: livox-mapping-mapper:local
+    init: true
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-31}
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      CYCLONEDDS_URI: file:///app/cyclonedds.xml
+      LIVOX_LIDAR_ID: ${LIVOX_LIDAR_ID:-0}
+    volumes:
+      - ./select_lidar.py:/app/select_lidar.py:ro
+      - ./cyclonedds.xml:/app/cyclonedds.xml:ro
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -e
+        source /opt/ros/humble/setup.bash
+        source /opt/mapping/install/setup.bash
+        exec python3 /app/select_lidar.py
+
+
