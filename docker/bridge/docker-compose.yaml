@@ -1,6 +1,8 @@
 services:
   ros1_bridge:
-    image: ros:foxy-ros1-bridge
+    build:
+      context: ../..
+      dockerfile: ./docker/bridge/Dockerfile
     network_mode: host
     ipc: host
     environment:
@@ -18,7 +20,10 @@ services:
       - |
         set -e
         source /opt/ros/noetic/setup.bash
+        source /ros1_ws/devel/setup.bash
         rosparam load /topics.yaml
         unset ROS_NAME
         source /opt/ros/foxy/setup.bash
+        source /ros2_ws/install/setup.bash
         exec ros2 run ros1_bridge parameter_bridge
+    
