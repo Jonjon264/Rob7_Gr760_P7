@@ -1,0 +1,28 @@
+# parameter_bridge creates both directions for these topics.
+# No robot TF or motion topics are bridged. FAST-LIO publishes its own local TF.
+topics:
+  - topic: /livox/lidar
+    type: livox_ros_driver2/msg/CustomMsg
+    queue_size: 5
+    qos:
+      history: keep_last
+      depth: 5
+      reliability: reliable
+      durability: volatile
+  - topic: /imu/data
+    type: sensor_msgs/msg/Imu
+    queue_size: 200
+  - topic: /livox/imu_192_168_2_202
+    type: sensor_msgs/msg/Imu
+    queue_size: 200
+  - topic: /livox/imu_192_168_2_203
+    type: sensor_msgs/msg/Imu
+    queue_size: 200
+  - topic: /livox/imu_192_168_2_204
+    type: sensor_msgs/msg/Imu
+    queue_size: 200
+  - topic: /livox/imu_192_168_2_205
+    type: sensor_msgs/msg/Imu
+    queue_size: 200
+services_1_to_2: []
+services_2_to_1: []
