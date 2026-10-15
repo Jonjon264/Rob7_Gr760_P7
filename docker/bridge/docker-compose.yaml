@@ -26,4 +26,22 @@ services:
         source /opt/ros/foxy/setup.bash
         source /ros2_ws/install/setup.bash
         exec ros2 run ros1_bridge parameter_bridge
+  real_sense_republish:
+    build:
+      context: ../..
+      dockerfile: ./docker/bridge/Dockerfile2
+    network_mode: host
+    privileged: true
+    ipc: host
+    stdin_open: true
+    tty: true
+    volumes:
+      - /dev:/dev
+      - /run/udev:/run/udev:ro
+      - /tpm/.X11-unix:/tmp/.X11-unix:rw
+    environment:
+      - ROS_DOMAIN_ID=0
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      
     
