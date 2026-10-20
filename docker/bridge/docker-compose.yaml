@@ -6,14 +6,15 @@ services:
     network_mode: host
     ipc: host
     environment:
-      - ROS_MASTER_URI=http://192.168.1.106:11311
-      - ROS_IP=192.168.1.131
+      - ROS_MASTER_URI=http://192.168.137.106:11311
+      - ROS_IP=192.168.137.2
       - ROS_DOMAIN_ID=0
     volumes:
       - ./config/topics.yaml:/topics.yaml:ro
-    restart: unless-stopped
+    restart: no
     extra_hosts:
       - "ysc-perception:192.168.1.106"  
+      - "ysc-perception:192.168.137.106"
     command:
       - bash
       - -c
@@ -39,7 +40,7 @@ services:
     volumes:
       - /dev:/dev
       - /run/udev:/run/udev:ro
-      - /tpm/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
     environment:
       - ROS_DOMAIN_ID=0
       - DISPLAY=${DISPLAY}

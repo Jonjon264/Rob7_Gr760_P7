@@ -189,6 +189,7 @@ pyrightconfig.json
 
 ### ROS2 ###
 install/
+build/
 log/
 bags/
 tf_trees/

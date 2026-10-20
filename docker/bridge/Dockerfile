@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ros-noetic-message-generation \
         ros-noetic-message-runtime \
         ros-noetic-std-msgs \
+        ros-foxy-rmw-cyclonedds-cpp \
     && rm -rf /var/lib/apt/lists/*
 
 # Pull the .msg files from upstream (pin a tag/commit if you want reproducibility)

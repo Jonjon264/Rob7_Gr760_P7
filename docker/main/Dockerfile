@@ -24,6 +24,7 @@ RUN apt update && \
         ros-humble-teleop-twist-keyboard \
         ros-humble-bondcpp \
         ros-humble-test-msgs \
+        ros-humble-rmw-cyclonedds-cpp \
     	wget \
     && rm -rf /var/lib/apt/lists/*
 
@@ -47,6 +48,9 @@ RUN rosdep update
 # RUN rm -rf /tmp/ws
 
 # Auto-source ROS
+
+# Set the RMW implementation
+#ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
 RUN echo "source /root/ros2_ws/install/setup.bash" >> /root/.bashrc
 
