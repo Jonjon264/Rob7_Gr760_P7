@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "x": 198,
+        "y": 100,
+        "name": "Festo",
+        "descriptor": "Production, Station"
+    },
+    {
+        "x": 334,
+        "y": 132,
+        "name": "Robot Cage",
+        "descriptor": "Robots, Its a trap"
+    },
+    {
+        "x": 231,
+        "y": 113,
+        "name": "Charging Station",
+        "descriptor": "Doggo, Home, Relax, Chill"
+    },
+    {
+        "x": 244,
+        "y": 136,
+        "name": "Tool Station",
+        "descriptor": "Tools, Makeshift, Screws"
+    }
+]
