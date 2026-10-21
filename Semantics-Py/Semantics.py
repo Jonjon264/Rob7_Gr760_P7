@@ -1,5 +1,26 @@
 from sentence_transformers import SentenceTransformer, util
 import json
+import rclpy
+from rclpy.node import Node
+from my_interfaces.msg import Waypoint
+
+class SemanticWaypointPub(Node):
+
+    def __init__(self):
+        super().__init__('Semantic_waypoint_pub')
+        self.publisher_ = self.create_publisher(
+            Waypoint,
+            "Semantic_Waypoint",
+            10
+        )
+
+    def publish_waypoint(self, name, x, y, score):
+        msg = Waypoint()
+        msg.name = name
+        msg.x = x
+        msg.y = y
+        msg.score = score
+        self.publisher_.publish(msg)
 
 model = SentenceTransformer("all-MiniLM-L6-v2") 
 #all-MiniLM-L6-v2 is a very lightweight model
@@ -55,6 +76,22 @@ commands = [
 ]
 
 readWaypoints()
+rclpy.init()
+
+publisher = SemanticWaypointPub()
+
+for cmd in commands:
+    matched_label, score, id = find_best_label(cmd)
+
+    publisher.publish_waypoint(
+        waypoints[id][0],  # name
+        waypoints[id][2],  # x
+        waypoints[id][3],  # y
+        score
+    )
+
+publisher.destroy_node()
+rclpy.shutdown()
 for cmd in commands:
     matched_label, score, id = find_best_label(cmd)
  #   print(f"Command: '{cmd}' -> Matched: '{matched_label}' (Score: {score:.3f})")
