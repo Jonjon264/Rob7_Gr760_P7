@@ -1,0 +1,26 @@
+[
+    {
+        "x": 198,
+        "y": 100,
+        "name": "Festo",
+        "descriptor": "Production, Station"
+    },
+    {
+        "x": 334,
+        "y": 132,
+        "name": "Robot Cage",
+        "descriptor": "Cages for UR5 robot cells"
+    },
+    {
+        "x": 231,
+        "y": 113,
+        "name": "Charging Station",
+        "descriptor": "Charging station for the robot where it should go when shutting down"
+    },
+    {
+        "x": 244,
+        "y": 136,
+        "name": "Tool Station",
+        "descriptor": "Tools cabinet containing screwdrivers, saws, pliers and so on"
+    }
+]
