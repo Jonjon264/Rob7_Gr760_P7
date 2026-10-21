@@ -23,17 +23,17 @@ topics:
     topic: /lidar_points
     type: sensor_msgs/msg/PointCloud2
     queue_size: 10
-  -
-    topic: /tf
-    type: tf2_msgs/msg/TFMessage
-    queue_size: 10
-  -
-    topic: /tf_static
-    type: tf2_msgs/msg/TFMessage
-    queue_size: 1
-    qos:
-      history: keep_all
-      durability: transient_local
+  # -
+  #   topic: /tf
+  #   type: tf2_msgs/msg/TFMessage
+  #   queue_size: 10
+  # -
+  #   topic: /tf_static
+  #   type: tf2_msgs/msg/TFMessage
+  #   queue_size: 1
+  #   qos:
+  #     history: keep_all
+  #     durability: transient_local
   -
     topic: /livox/lidar
     type: livox_ros_driver2/msg/CustomMsg

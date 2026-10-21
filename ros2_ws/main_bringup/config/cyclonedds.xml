@@ -1,0 +1,42 @@
+<!--
+
+  CycloneDDS configuration:
+  It defines peer list of who it can talk to using unicast.
+  Make sure robots are set to the correct static IP addresses.
+  If you get an error saying 2MB buffer size is not allowed, increase the max buffer size on the host with:
+    sudo sysctl -w net.core.rmem_max=8388608
+    sudo sysctl -w net.core.wmem_max=8388608
+  This is a shared configuration, so it doesn't define the interface address.
+  The inferface address of each machine should be defined in their respective /root/cyclone_iface.xml file, 
+  which should look like (example for rover computer):
+  
+  <CycloneDDS xmlns="https://cdds.io/config">
+    <Domain id="any">
+      <General>
+        <Interfaces>
+          <NetworkInterface address="192.168.0.205" multicast="false"/>
+        </Interfaces>
+      </General>
+    </Domain>
+  </CycloneDDS>
+
+-->
+<CycloneDDS xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+    <Domain id="any">
+        <General>
+            <AllowMulticast>false</AllowMulticast>
+        </General>
+        <Discovery>
+            <ParticipantIndex>auto</ParticipantIndex>
+            <MaxAutoParticipantIndex>60</MaxAutoParticipantIndex>
+            <Peers>
+                <Peer address="192.168.137.2"/>
+                <Peer address="192.168.137.106"/>
+            </Peers>
+        </Discovery>
+        <Internal>
+            <SocketReceiveBufferSize min="2MB"/>
+            <SocketSendBufferSize min="2MB"/>
+        </Internal>
+    </Domain>
+</CycloneDDS>

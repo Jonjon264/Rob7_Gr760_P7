@@ -45,4 +45,7 @@ RUN source /opt/ros/noetic/setup.bash \
     && colcon build --packages-select ros1_bridge \
         --cmake-force-configure 
 
+# Set the RMW implementation
+RUN echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc 
+
 CMD ["bash"]
