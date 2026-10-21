@@ -18,6 +18,12 @@ services:
       - type: bind
         source: ../../Semantics-Py
         target: /root/Semantics-Py
+      
+      - type: bind
+        source: ../../Map/MapFiles/Map1/waypoints.json
+        target: /root/waypoints.json
 
     environment:
       - ROS_DOMAIN_ID=0
+
+#/home/simon/GitKraken Repositories/P7Repository/Rob7_Gr760_P7/Map/MapFiles/Map1/waypoints.json
