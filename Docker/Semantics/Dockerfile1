@@ -1,0 +1,42 @@
+
+FROM localai/localai:sha-7f7b10f
+
+# Install development tools and native libraries
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        software-properties-common \
+        wget \
+        git \
+        nano \
+        iputils-ping \
+        net-tools \
+        cmake \
+        python3-pip \
+        libpcl-dev \
+        libeigen3-dev \
+    && rm -rf /var/lib/apt/lists/*  
+
+# Install virtual environment support
+RUN apt-get update && \
+    apt-get install -y python3-full python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create the virtual environment
+RUN python3 -m venv /opt/ai-venv
+
+# Install Python packages inside the virtual environment
+RUN /opt/ai-venv/bin/python -m pip install --no-cache-dir \
+    torch \
+    sentence-transformers==5.1.0
+
+# Use the virtual environment by default
+ENV PATH="/opt/ai-venv/bin:${PATH}"
+
+# # Install Python dependencies
+# RUN python3 -m pip install --no-cache-dir \
+#     torch \
+#     sentence-transformers==5.1.0
+
+WORKDIR /root/
+
+CMD ["bash"]
