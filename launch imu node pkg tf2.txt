@@ -1,0 +1,66 @@
+<launch>
+    <!-- imu -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base2imu" args="-0.1713 0 -0.05925 0 0 0 base_link imu_link" />
+</launch>
+
+
+<launch>
+    <!-- \u76f8\u673a\u7ad6\u653e\u6216\u5e73\u653e vertical / charge / push_video / push_video_all -->
+    <arg name="camera_pose" default="charge" />
+
+    <!-- \u7528\u4e8e\u81ea\u4e3b\u5145\u7535\u7684\u671d\u4e0b\u76f8\u673a\u7684tf -->
+    <group if="$(eval arg('camera_pose') == 'charge')">
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2frontdowncamera" args="0.4033, 0.032, -0.01365 0 0.5236 0 /base_link /camera_front_down_link" />
+    </group>
+
+    <!-- \u7528\u4e8e\u63a8\u6d41\u7684\u9664\u53bb\u81ea\u4e3b\u5145\u7535\u671d\u4e0b\u76f8\u673a\u7684tf -->
+    <group if="$(eval arg('camera_pose') == 'push_video')">
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2frontupcamera" args="0.4085 0.0475 0.0328 0 -0.17453 0 /base_link /camera_front_up_link" />
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2backcamera" args="-0.4033 -0.017 -0.01365 -0.258819 0 0.9659258 0  /base_link /camera_back_link" />
+    </group>
+
+    <!-- \u4e09\u8def\u76f8\u673a\u7684tf -->
+    <group if="$(eval arg('camera_pose') == 'push_video_all')">
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2frontupcamera" args="0.4085 0.0475 0.0328 0 -0.17453 0 /base_link /camera_front_up_link" />
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2frontdowncamera" args="0.4033, 0.032, -0.01365 0 0.5236 0 /base_link /camera_front_down_link" />
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2backcamera" args="-0.4033 -0.017 -0.01365 -0.258819 0 0.9659258 0  /base_link /camera_back_link" />
+    </group>
+
+
+    <group if="$(eval arg('camera_pose') == 'vertical')">
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2frontleftcamera" args="0.4253 0.04547 0.02985 0.6532815 0.0308436 -0.2705981 0.7064338 /base_link /camera_front_left_link" />
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2frontrightcamera" args="0.4253 -0.04547 0.02985 0.7064338 0.2705981 -0.0308436 0.6532815 /base_link /camera_front_right_link" />
+        <!-- \u540e\u9762\u76f8\u673a\u5411\u4e0b30\u5ea6 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="base2backcamera" args="-0.4033 -0.017 -0.01365 -0.258819 0 0.9659258 0  /base_link /camera_back_link" />
+    </group>
+
+
+</launch>
+
+
+<launch>
+  <!-- \u96f7\u8fbe\u7c7b\u578b rslidar / velodyne / hesai / ouster / livox -->
+  <arg name="lidar_type" default="livox" />
+
+
+  <group if="$(eval arg('lidar_type') == 'rslidar')">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base2rslidar" args="0.31 0 0.123 0 0 0 base_link lidar_link" />
+  </group>
+
+  <group if="$(eval arg('lidar_type') == 'velodyne')">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base2velodyne" args="0.31 0 0.123 0 0 0 base_link velodyne" />
+  </group>
+
+  <group if="$(eval arg('lidar_type') == 'hesai')">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base2hesai" args="0.31 0 0.123 0 0 0 base_link hesai" />		<!-- TODO -->
+  </group>
+
+  <group if="$(eval arg('lidar_type') == 'ouster')">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base2ouster" args="0.31 0 0.123 0 0 0 base_link os_sensor" />		<!-- TODO -->
+  </group>
+
+  <group if="$(eval arg('lidar_type') == 'livox')">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base2livox" args="0.0 0 0.0 0 0 0 base_link lidar_link" />
+  </group>
+
+</launch>

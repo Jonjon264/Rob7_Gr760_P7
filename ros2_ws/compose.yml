@@ -1,0 +1,28 @@
+name: x30-workspace
+services:
+  mapper:
+    # Reuse dependencies from the existing Humble image, but compile and run
+    # the source mounted from this workspace, not the image's old FAST-LIO.
+    image: livox-mapping-mapper:local
+    user: "${X30_UID:-1000}:${X30_GID:-1000}"
+    init: true
+    network_mode: host
+    working_dir: /workspace
+    environment:
+      ROS_DOMAIN_ID: ${X30_ROS_DOMAIN_ID:-31}
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      CYCLONEDDS_URI: file:///workspace/cyclonedds.xml
+      ROS_HOME: /workspace/.ros
+      ROS_LOG_DIR: /workspace/log/ros
+      CMAKE_BUILD_PARALLEL_LEVEL: "1"
+      MAKEFLAGS: -j1
+    volumes:
+      - .:/workspace
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -e
+        source /opt/ros/humble/setup.bash
+        colcon build --merge-install --symlink-install --parallel-workers 1 --cmake-args -DCMAKE_BUILD_TYPE=Release
+        source /workspace/install/setup.bash
+        exec ros2 launch fast_lio x30.launch.py use_sim_time:=${USE_SIM_TIME:-false} publish_static_tf:=${PUBLISH_STATIC_TF:-true}

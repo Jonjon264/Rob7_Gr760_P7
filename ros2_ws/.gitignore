@@ -1,0 +1,8 @@
+/.ros/
+/build/
+/build_*/
+/install/
+/install_*/
+/log/
+/rosbag2_*/
+/*.pcd
