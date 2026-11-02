@@ -1,3 +1,6 @@
 -
   ros1_package_name: 'livox_ros_driver2'
   ros2_package_name: 'livox_ros_driver2'
+-
+  ros1_package_name: 'move_base_msgs'
+  ros2_package_name: 'move_base_msgs'

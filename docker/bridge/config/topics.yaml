@@ -3,22 +3,22 @@ topics:
     topic: /cmd_vel
     type: geometry_msgs/msg/Twist
     queue_size: 10
-  -
-    topic: /livox/imu_192_168_2_202
-    type: sensor_msgs/msg/Imu
-    queue_size: 10
-  -
-    topic: /livox/imu_192_168_2_203
-    type: sensor_msgs/msg/Imu
-    queue_size: 10
-  -
-    topic: /livox/imu_192_168_2_204
-    type: sensor_msgs/msg/Imu
-    queue_size: 10
-  -
-    topic: /livox/imu_192_168_2_205
-    type: sensor_msgs/msg/Imu
-    queue_size: 10
+  # -
+  #   topic: /livox/imu_192_168_2_202
+  #   type: sensor_msgs/msg/Imu
+  #   queue_size: 10
+  # -
+  #   topic: /livox/imu_192_168_2_203
+  #   type: sensor_msgs/msg/Imu
+  #   queue_size: 10
+  # -
+  #   topic: /livox/imu_192_168_2_204
+  #   type: sensor_msgs/msg/Imu
+  #   queue_size: 10
+  # -
+  #   topic: /livox/imu_192_168_2_205
+  #   type: sensor_msgs/msg/Imu
+  #   queue_size: 10
   -
     topic: /lidar_points
     type: sensor_msgs/msg/PointCloud2
@@ -34,7 +34,27 @@ topics:
     qos:
       history: keep_all
       durability: transient_local
+  # -
+  #   topic: /livox/lidar
+  #   type: livox_ros_driver2/msg/CustomMsg
+  #   queue_size: 10
+  - 
+    topic: /move_base/goal
+    type: move_base_msgs/msg/MoveBaseActionGoal
+    queue_size: 10
+  - 
+    topic: /move_base/result
+    type: move_base_msgs/msg/MoveBaseActionResult
+    queue_size: 10
   -
-    topic: /livox/lidar
-    type: livox_ros_driver2/msg/CustomMsg
+    topic: /move_base/feedback
+    type: move_base_msgs/msg/MoveBaseActionFeedback
+    queue_size: 10
+  -
+    topic: /move_base/cancel
+    type: actionlib_msgs/msg/GoalID
+    queue_size: 10
+  -
+    topic: /move_base/status
+    type: actionlib_msgs/msg/GoalStatusArray
     queue_size: 10

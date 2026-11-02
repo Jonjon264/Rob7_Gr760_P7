@@ -48,23 +48,11 @@ RUN rosdep update
 # RUN rm -rf /tmp/ws
 
 # Auto-source ROS
-
-
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
 RUN echo "source /root/ros2_ws/install/setup.bash" >> /root/.bashrc
 # Set the RMW implementation
 RUN echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc 
 #RUN echo "export CYCLONEDDS_URI="file:///root/cyclone_iface.xml,file:///root/ros2_ws/install/main_bringup/share/main_bringup/config/cyclonedds.xml"" >> /root/.bashrc 
-
-# Install Livox SDK
-#WORKDIR /root
-#RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git && \
-#    mkdir -p Livox-SDK2/build && \
-#    cd Livox-SDK2/build && \
-#    cmake .. && \
-#    make -j$(nproc) && \
-#    make install && \
-#    ldconfig
 
 WORKDIR /root/ros2_ws
 

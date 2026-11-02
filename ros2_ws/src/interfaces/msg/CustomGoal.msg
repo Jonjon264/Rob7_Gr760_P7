@@ -1,0 +1,2 @@
+string goalid
+geometry_msgs/PoseStamped goal

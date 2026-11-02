@@ -6,11 +6,14 @@ services:
     network_mode: host
     ipc: host
     environment:
-      - ROS_MASTER_URI=http://192.168.1.106:11311
-      - ROS_IP=192.168.1.131
+      - ROS_MASTER_URI=http://192.168.137.106:11311
+      - ROS_IP=192.168.137.2
       - ROS_DOMAIN_ID=0
     volumes:
       - ./config/topics.yaml:/topics.yaml:ro
+      - type: bind
+        source: ../../ros2_ws
+        target: /root/ros2_ws
     restart: no
     extra_hosts:
       - "ysc-perception:192.168.1.106"  
