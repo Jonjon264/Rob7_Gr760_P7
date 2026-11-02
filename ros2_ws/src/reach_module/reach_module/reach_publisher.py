@@ -24,7 +24,7 @@ class ReachPublisher(Node):
         self.goal_publisher = self.create_publisher(
             MoveBaseActionGoal, '/move_base/goal', 10)
         self.create_subscription(
-            GoalArray, '/goal_array', self.goal_callback, 10)
+            GoalArray, '/robot/goals', self.goal_callback, 10)
         self.create_subscription(
             MoveBaseActionResult, '/move_base/result', self.result_callback, 10)
 
