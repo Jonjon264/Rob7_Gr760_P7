@@ -12,7 +12,15 @@ RUN apt update && \
 	    net-tools \
     	nano \
     	cmake \
-        pip \
+        python3-pip \
+        python3-dev \
+        build-essential \
+        portaudio19-dev \
+        libsndfile1 \
+        libasound2-plugins \
+        pulseaudio-utils \        
+        libgomp1 \
+        alsa-utils \
     	libpcl-dev \
         libeigen3-dev \
     	ros-humble-pcl-conversions \
@@ -29,6 +37,20 @@ RUN apt update && \
     && rm -rf /var/lib/apt/lists/*
 
 
+# Install voice dependencies using ROS Humble's system Python.
+COPY ros2_ws/src/qwen_voice_manager/requirements-voice.txt /tmp/requirements-voice.txt
+
+RUN python3 -m pip install --no-cache-dir \
+        torch==2.5.1 torchaudio==2.5.1 \
+        --index-url https://download.pytorch.org/whl/cpu \
+    && python3 -m pip install --no-cache-dir \
+        -r /tmp/requirements-voice.txt
+        
+# Route ALSA applications, including PyAudio, through the host audio server.
+RUN printf '%s\n' \
+    'pcm.!default { type pulse }' \
+    'ctl.!default { type pulse }' \
+    > /etc/asound.conf
 # Initialize rosdep
 RUN rosdep init || true
 RUN rosdep update

@@ -8,11 +8,28 @@ services:
     ipc: host
     stdin_open: true
     tty: true
+    devices:
+      - /dev/snd:/dev/snd
     volumes:
       - type: bind
         source: ../../ros2_ws
         target: /root/ros2_ws
+
+      # Connect to the host audio server
+      - type: bind
+        source: /run/user/1000/pulse/native
+        target: /tmp/pulse-native
+        read_only: true
+      - type: bind
+        source: /home/a/.config/pulse/cookie
+        target: /tmp/pulse-cookie
+        read_only: true
+
     environment:
       - ROS_DOMAIN_ID=0
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
+
+      # Tell audio applications how to connect
+      - PULSE_SERVER=unix:/tmp/pulse-native
+      - PULSE_COOKIE=/tmp/pulse-cookie
