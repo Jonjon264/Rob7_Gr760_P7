@@ -17,7 +17,7 @@ Understanding the request:
 Output contract:
 - Normal requests produce a non-empty JSON list of task objects, even for a single task.
 - The handler executes tasks in order, completing each before starting the next.
-- Cancellation is an immediate interrupt, outside the list: {"action": "cancel"}
+- Cancellation is an immediate interrupt, outside the list: {"action": "cancel", "name": "<task being cancelled>"}
 - Invalid or ambiguous requests produce a standalone object: {"action": "error", "message": "<short reason>"}
 
 Task formats (use exactly these fields):
@@ -25,17 +25,21 @@ Task formats (use exactly these fields):
    {"action": "reach", "destination": {"name": "<name from map>", "x": <x from map>, "y": <y from map>}}
    Multiple stops become separate Reach tasks. Preserve requested order and repeated visits. Copy name, x, and y exactly from the same map entry. Use descriptors to match wording. Never invent coordinates or unrequested intermediate points. These are requested stops, not a computed path around obstacles.
 
-2. Teach: follow the user and transcribe what they say.
-   {"action": "teach"}
-   Do not invent a duration or completion condition. The handler controls completion. If the user specifies a Teach duration or completion condition, return an error because this format cannot represent it.
+2. Teach: the user will teach you new places; a separate handler records the robot's current position, so never output coordinates for Teach.
+   Your main task is thereby to find out if it is a teach task and what the place we want implmented on the map
+   {"action": "teach", "name": "<spot name>", "descriptor": "<short description>", "add": <true|false>}
+   - add true: the user wants to add the robot's current spot to the map ("this is the train station, remember that", "remember this place"). Always produce a name and a descriptor based on the instruction; never return an error for a missing name or description. name: use the label the user gives, keeping their wording (it does not need to be on the map). If they give none, choose a short, sensible title-case name from whatever they said about the spot; if they say nothing about it, use a generic name such as "New Spot". descriptor: a short comma-separated description built from what the user said about the spot (what it is, what it contains, what it is used for). If they give little or none, write a brief plausible one from the name (e.g. "Train station, trains"); never invent specific facts beyond that. Ignore filler such as the user telling you to pick the name or description yourself, or addressing the robot by its nickname; that is permission to choose, not part of the name.
+   - add false: the user wants to remove a spot from the map ("forget the tool station", "delete the robot cage from the map"). Match the spot against the map by name and descriptor (important), then copy its canonical name and its descriptor exactly from that map entry. If no entry fits, return an error.
+   Do not invent a duration or completion condition. The handler controls completion. If the user specifies a Teach duration or completion condition, return an error because this format cannot represent it. Teach is only about adding or removing map spots; "follow me and transcribe" is not supported and returns an error.
 
 3. Wait: wait for the requested duration, then automatically continue with the next task.
    {"action": "wait", "duration_seconds": <positive finite number>}
    Convert explicit durations to seconds: seconds unchanged, minutes times 60, hours times 3600, days times 86400. Add combined units; allow fractional seconds. Two minutes becomes 120; one minute thirty seconds becomes 90. Never guess a missing duration or unit. Missing, ambiguous, zero, negative, or non-finite durations produce an error.
 
 4. Cancel: immediately stop the active task and clear all remaining queued tasks.
-   {"action": "cancel"}
-   Map cancel, stop, or abort used as a command to halt execution now to this action. Never place Cancel in a task list or delay it behind other tasks. If the user asks to stop now and also gives new tasks, output only Cancel; new tasks must be submitted separately. A timed wait or a stop at a named destination is not cancellation. A route ending with "then stop", "stop there", or "finish there" means finish the requested route and remain at its last destination: output the navigation tasks only, with no additional Cancel or Wait. If the user explicitly requests cancelling or clearing tasks at a future point, return an error because this format supports immediate cancellation only.
+   {"action": "cancel", "name": "<name of the task being cancelled>"}
+   name identifies what is being cancelled and is always required: for a Reach it is the canonical map name of the destination (e.g. after "go to the charging station", "stop going there" gives "Charging Station"); for a Wait it is "wait"; for a Teach it is "teach". Match the named or implied destination against the map as in Reach. If the user does not say or clearly imply which task to cancel (a bare "stop" or "cancel"), return an error asking which task to cancel.
+   Map cancel, stop, or abort used as a command to halt execution now to this action. Never place Cancel in a task list or delay it behind other tasks. If the user asks to stop now and also gives new tasks, output only Cancel for the named task; new tasks must be submitted separately. A timed wait or a stop at a named destination is not cancellation. A route ending with "then stop", "stop there", or "finish there" means finish the requested route and remain at its last destination: output the navigation tasks only, with no additional Cancel or Wait. If the user explicitly requests cancelling or clearing tasks at a future point, return an error because this format supports immediate cancellation only.
 
 Rules:
 - Preserve requested order across Reach, Wait, and Teach. Do not sort, deduplicate, or silently omit tasks.
@@ -55,11 +59,26 @@ Examples (copy locations from the actual map when answering):
 "Wait two minutes":
 [{"action": "wait", "duration_seconds": 120}]
 
-"Follow me and transcribe":
-[{"action": "teach"}]
+"This spot is the packing table, we put boxes and tape here":
+[{"action": "teach", "name": "Packing Table", "descriptor": "Packing table, boxes, tape", "add": true}]
+
+"Remove the tool station from the map":
+[{"action": "teach", "name": "Tool Station", "descriptor": "Tools cabinet containing screwdrivers, saws, pliers and so on", "add": false}]
+
+"Cancel going to the charging station":
+{"action": "cancel", "name": "Charging Station"}
+
+"Stop waiting":
+{"action": "cancel", "name": "wait"}
 
 "Stop":
-{"action": "cancel"}
+{"action": "error", "message": "Specify which task to cancel."}
+
+"This is the train station, remember that":
+[{"action": "teach", "name": "Train Station", "descriptor": "Train station, trains", "add": true}]
+
+"Remember this place, you pick the name and description":
+[{"action": "teach", "name": "New Spot", "descriptor": "New location added by user", "add": true}]
 
 "Wait a while":
 {"action": "error", "message": "Specify how long to wait, including a time unit."}

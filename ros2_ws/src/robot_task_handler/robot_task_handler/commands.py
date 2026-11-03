@@ -14,13 +14,26 @@ class Goal:
 
 
 @dataclass(frozen=True)
+class Teach:
+    place_id: str
+    description: str
+    add: bool
+
+
+@dataclass(frozen=True)
 class Cancel:
-    pass
+    name: str = ''  # empty means cancel everything
 
 
 @dataclass(frozen=True)
 class ManagerError:
     message: str
+
+
+def _text(value, label):
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f'{label} must be a non-empty string')
+    return value
 
 
 def _coordinate(value):
@@ -35,7 +48,53 @@ def _coordinate(value):
     return number
 
 
-def parse_command(raw: str) -> Union[List[Goal], Cancel, ManagerError]:
+def _require_fields(task, fields, label):
+    if set(task) != fields:
+        raise ValueError(f'{label} requires exactly: {sorted(fields)}')
+
+
+def _parse_reach(task):
+    _require_fields(task, {'action', 'destination'}, 'reach')
+    destination = task['destination']
+    if not isinstance(destination, dict):
+        raise ValueError('reach destination must be an object')
+    _require_fields(destination, {'name', 'x', 'y'}, 'destination')
+    return Goal(
+        goal_id=_text(destination['name'], 'destination name'),
+        x=_coordinate(destination['x']),
+        y=_coordinate(destination['y']),
+    )
+
+
+def _parse_teach(task):
+    _require_fields(task, {'action', 'name', 'descriptor', 'add'}, 'teach')
+    if not isinstance(task['add'], bool):
+        raise ValueError('teach add must be true or false')
+    return Teach(
+        place_id=_text(task['name'], 'teach name'),
+        description=_text(task['descriptor'], 'teach descriptor'),
+        add=task['add'],
+    )
+
+
+def _parse_standalone(command):
+    """Cancel and error are interrupts, never part of a task list."""
+    action = command.get('action')
+    if action == 'cancel' and set(command) <= {'action', 'name'}:
+        name = command.get('name', '')
+        if not isinstance(name, str):
+            raise ValueError('cancel name must be a string')
+        return Cancel(name)
+    if action == 'error':
+        _require_fields(command, {'action', 'message'}, 'error')
+        return ManagerError(_text(command['message'], 'error message'))
+    raise ValueError('only cancel and error may be standalone objects')
+
+
+_TASK_PARSERS = {'reach': _parse_reach, 'teach': _parse_teach}
+
+
+def parse_command(raw: str) -> Union[List[Goal], List[Teach], Cancel, ManagerError]:
     """Validate all tasks atomically; never drop unsupported steps.
 
     The manager validates map membership. This transport layer checks shape
@@ -43,33 +102,19 @@ def parse_command(raw: str) -> Union[List[Goal], Cancel, ManagerError]:
     """
     command = json.loads(raw)
     if isinstance(command, dict):
-        if command == {'action': 'cancel'}:
-            return Cancel()
-        if (
-            set(command) == {'action', 'message'}
-            and command['action'] == 'error'
-            and isinstance(command['message'], str)
-            and command['message'].strip()
-        ):
-            return ManagerError(command['message'])
-        raise ValueError('only cancel and error may be standalone objects')
+        return _parse_standalone(command)
     if not isinstance(command, list) or not command:
-        raise ValueError('expected a non-empty list of Reach tasks')
+        raise ValueError('expected a non-empty list of tasks')
 
-    goals = []
+    tasks = []
     for index, task in enumerate(command):
-        if not isinstance(task, dict) or task.get('action') != 'reach':
-            raise ValueError(f'task {index}: only Reach is supported in task lists')
-        if set(task) != {'action', 'destination'}:
-            raise ValueError(f'task {index}: Reach requires action and destination only')
-        destination = task['destination']
-        if not isinstance(destination, dict) or set(destination) != {'name', 'x', 'y'}:
-            raise ValueError(f'task {index}: destination requires name, x, and y only')
-        if not isinstance(destination['name'], str) or not destination['name'].strip():
-            raise ValueError(f'task {index}: destination name must be non-empty')
-        goals.append(Goal(
-            goal_id=destination['name'],
-            x=_coordinate(destination['x']),
-            y=_coordinate(destination['y']),
-        ))
-    return goals
+        if not isinstance(task, dict) or task.get('action') not in _TASK_PARSERS:
+            raise ValueError(f'task {index}: only reach and teach are supported in task lists')
+        try:
+            tasks.append(_TASK_PARSERS[task['action']](task))
+        except ValueError as exc:
+            raise ValueError(f'task {index}: {exc}') from exc
+
+    if len({type(t) for t in tasks}) > 1:
+        raise ValueError('mixing reach and teach in one request is not supported yet')
+    return tasks

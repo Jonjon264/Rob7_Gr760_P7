@@ -10,6 +10,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Waypoint.msg"
   "msg/CustomGoal.msg"
   "msg/GoalArray.msg"
+  "msg/CustomTeach.msg"
   DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
 )
 

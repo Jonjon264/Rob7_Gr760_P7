@@ -31,7 +31,11 @@ def validate(cmd, map_data):
         if set(cmd) != {"action", "message"} or not isinstance(cmd["message"], str) or not cmd["message"].strip():
             raise ValueError("error requires only action and a non-empty message")
         return cmd
-    if action == "cancel" and set(cmd) == {"action"}:
+    if action == "cancel":
+        if set(cmd) != {"action", "name"} or not isinstance(cmd["name"], str):
+            raise ValueError("cancel requires only action and name")
+        if cmd["name"] not in {"wait", "teach"} | {p["name"] for p in map_data}:
+            raise ValueError(f"cancel name is not a known task: {cmd['name']}")
         return cmd
     raise ValueError("only cancel and error may be standalone objects; use a list for tasks")
 
@@ -46,7 +50,7 @@ def validate_task(cmd, map_data):
         raise ValueError("cancel must be a standalone interrupt outside the task list")
     expected_fields = {
         "reach": {"action", "destination"},
-        "teach": {"action"},
+        "teach": {"action", "name", "descriptor", "add"},
         "wait": {"action", "duration_seconds"},
     }[action]
     if set(cmd) != expected_fields:
@@ -62,6 +66,15 @@ def validate_task(cmd, map_data):
             or dest not in known
         ):
             raise ValueError(f"destination is not on map: {dest}")
+    elif action == "teach":
+        if not all(isinstance(cmd[k], str) and cmd[k].strip() for k in ("name", "descriptor")):
+            raise ValueError("teach name and descriptor must be non-empty strings")
+        if not isinstance(cmd["add"], bool):
+            raise ValueError("teach add must be true or false")
+        if not cmd["add"] and {"name": cmd["name"], "descriptor": cmd["descriptor"]} not in [
+            {"name": p["name"], "descriptor": p["descriptor"]} for p in map_data
+        ]:
+            raise ValueError(f"teach removal is not on map: {cmd['name']}")
     elif action == "wait":
         duration = cmd["duration_seconds"]
         if type(duration) not in (int, float) or duration <= 0 or (
