@@ -12,8 +12,8 @@
         "descriptor": "Cages for UR5 robot cells"
     },
     {
-        "x": 231,
-        "y": 113,
+        "x": 8.5,
+        "y": 4.5,
         "name": "Charging Station",
         "descriptor": "Charging station for the robot where it should go when shutting down"
     },

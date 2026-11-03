@@ -11,6 +11,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/GoalID.msg"
   "msg/MoveBaseGoal.msg"
   "msg/MoveBaseActionGoal.msg"
+  "msg/GoalStatus.msg"
+  "msg/MoveBaseResult.msg"
+  "msg/MoveBaseActionResult.msg"
   DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
 )
 
