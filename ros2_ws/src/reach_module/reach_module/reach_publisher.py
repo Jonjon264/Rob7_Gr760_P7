@@ -1,7 +1,8 @@
 import rclpy
+import std_msgs.msg
 from rclpy.node import Node
 from collections import deque
-from actionlib_msgs.msg import GoalStatus
+from actionlib_msgs.msg import GoalStatus, GoalID
 from interfaces.msg import GoalArray
 from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseActionResult
 
@@ -16,33 +17,40 @@ TERMINAL = {
 
 
 class ReachPublisher(Node):
-    """Forward GoalArray goals to move_base one at a time."""
 
     def __init__(self) -> None:
         super().__init__('reach_publisher')
 
         self.goal_publisher = self.create_publisher(
             MoveBaseActionGoal, '/move_base/goal', 10)
+        self.cancel_publisher = self.create_publisher(
+            GoalID, '/move_base/cancel', 10)
         self.create_subscription(
             GoalArray, '/robot/goals', self.goal_callback, 10)
         self.create_subscription(
             MoveBaseActionResult, '/move_base/result', self.result_callback, 10)
+        self.create_subscription(
+            std_msgs.msg.String, '/robot/cancel', self.cancel_callback, 10)
+
 
         self.queue = deque()
-        self.current_id = None   # id of the goal currently being executed
-        self.counter = 0
+        self.current_id = None
+        self.cancel_current = False
 
     def goal_callback(self, message: GoalArray) -> None:
+
         if not message.goals:
             self.get_logger().warn('Received empty GoalArray, ignoring')
             return
 
-        # A new array replaces whatever was pending
-        self.queue = deque(message.goals)
+        self.queue.extend(message.goals)
         self.get_logger().info(f'Queued {len(self.queue)} goals')
-        self.send_next()
+        
+        if self.current_id is None:
+            self.send_next()
 
     def send_next(self) -> None:
+
         if not self.queue:
             self.current_id = None
             self.get_logger().info('All goals completed')
@@ -50,15 +58,19 @@ class ReachPublisher(Node):
 
         goal = self.queue.popleft()
 
+        if not goal.goalid:
+            self.get_logger().warn('Goal has no id, skipping')
+            self.send_next()
+            return
+
         msg = MoveBaseActionGoal()
         msg.header.stamp = self.get_clock().now().to_msg()
-        self.counter += 1
-        self.current_id = f'{self.get_name()}-{self.counter}'
-        msg.goal_id.id = self.current_id
         msg.header.frame_id = "map"
-        # msg.goal_id.stamp = msg.header.stamp
 
-        # msg.goal.target_pose.header = goal.header
+        self.current_id = goal.goalid
+        msg.goal_id.id = self.current_id
+        #msg.goal_id.stamp = msg.header.stamp
+
         msg.goal.target_pose.header.frame_id = "map"
         msg.goal.target_pose.pose.position.x = goal.goal.pose.position.x
         msg.goal.target_pose.pose.position.y = goal.goal.pose.position.y
@@ -67,8 +79,9 @@ class ReachPublisher(Node):
         self.get_logger().info(
             f'Sent goal {self.current_id} ({len(self.queue)} remaining)')
 
+        
     def result_callback(self, message: MoveBaseActionResult) -> None:
-        # Ignore results for goals we didn't send
+
         if message.status.goal_id.id != self.current_id:
             return
 
@@ -78,7 +91,14 @@ class ReachPublisher(Node):
 
         if status == GoalStatus.SUCCEEDED:
             self.get_logger().info(f'Goal {self.current_id} reached')
+            self.cancel_current = False
             self.send_next()
+
+        elif self.cancel_current:
+            self.get_logger().info(f'Goal {self.current_id} cancelled')
+            self.cancel_current = False
+            self.send_next()
+
         else:
             self.get_logger().error(
                 f'Goal {self.current_id} ended with status {status}: '
@@ -86,7 +106,26 @@ class ReachPublisher(Node):
             self.queue.clear()
             self.current_id = None
 
+    def cancel_callback(self, message: std_msgs.msg.String) -> None:
 
+        if message.data == self.current_id:
+            self.get_logger().info(f'Cancelling current goal {message.data}')
+            self.cancel_current = True #Comment out if not connected to robot
+            cancel_msg = GoalID()
+            cancel_msg.id = self.current_id
+            self.cancel_publisher.publish(cancel_msg)
+            #self.send_next() #Comment out if connected to robot
+            return
+        
+        for goal in self.queue:
+            if goal.goalid == message.data:
+                self.queue.remove(goal)
+                self.get_logger().info(f'Cancelled goal {message.data}')
+                return
+            
+        self.get_logger().warn(f'Cancel requested for unknown goal {message.data}')
+
+            
 def main(args=None) -> None:
     rclpy.init(args=args)
     node = ReachPublisher()
