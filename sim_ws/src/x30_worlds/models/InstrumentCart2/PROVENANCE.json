@@ -1,0 +1,10 @@
+{
+  "name": "InstrumentCart2",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/InstrumentCart2",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/InstrumentCart2/2/InstrumentCart2.zip",
+  "sha256": "b62a40f8a05386f365713d132cab2deb74b07da5168fb4c769531f602f981d70"
+}

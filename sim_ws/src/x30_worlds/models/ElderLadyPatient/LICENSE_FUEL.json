@@ -1,0 +1,10 @@
+{
+  "name": "ElderLadyPatient",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ElderLadyPatient",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ElderLadyPatient/2/ElderLadyPatient.zip",
+  "sha256": "56ecd1c48b672484d5f7dc129a8e789e77a6d0524b4c16556ee00b1f6be410c2"
+}

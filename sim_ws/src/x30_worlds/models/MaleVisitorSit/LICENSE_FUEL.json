@@ -1,0 +1,10 @@
+{
+  "name": "MaleVisitorSit",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorSit",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorSit/2/MaleVisitorSit.zip",
+  "sha256": "7bba6117aa8b1de518801c9b14a66600026adc28e531f3e58b6c758ca10914d3"
+}

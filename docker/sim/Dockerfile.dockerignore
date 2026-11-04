@@ -1,0 +1,17 @@
+# Keep the build context limited to simulator inputs (no bags or Humble builds).
+**
+!docker/
+!docker/sim/
+!docker/sim/Dockerfile
+!docker/sim/patches/
+!docker/sim/patches/**
+!sim_ws/
+!sim_ws/src/
+!sim_ws/src/**
+!configs/
+!configs/sim/
+!configs/sim/**
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/*.egg-info/

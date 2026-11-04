@@ -1,0 +1,10 @@
+{
+  "name": "SurgicalTrolley",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/SurgicalTrolley",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/SurgicalTrolley/2/SurgicalTrolley.zip",
+  "sha256": "651f5553c160be33395eb3e7e40520e8d38c74d350cc649ca9e6870d48b8d5b7"
+}

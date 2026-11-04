@@ -1,0 +1,10 @@
+{
+  "name": "CGMClassic",
+  "owner": "OpenRobotics",
+  "version": 4,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/CGMClassic",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/CGMClassic/4/CGMClassic.zip",
+  "sha256": "2f8366ef6c5650457ee0f1357956098fa1f4afe8caee983cd2d9b5284b40f6b7"
+}

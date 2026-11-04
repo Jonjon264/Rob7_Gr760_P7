@@ -1,0 +1,10 @@
+{
+  "name": "StorageRackCoverOpen",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRackCoverOpen",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRackCoverOpen/2/StorageRackCoverOpen.zip",
+  "sha256": "5dbaa6e783b1c4e24e62101db6dca0e0074138ce2eb50479fb86eb29efa5c710"
+}

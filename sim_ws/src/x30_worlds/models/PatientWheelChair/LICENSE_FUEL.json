@@ -1,0 +1,10 @@
+{
+  "name": "PatientWheelChair",
+  "owner": "OpenRobotics",
+  "version": 4,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientWheelChair",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientWheelChair/4/PatientWheelChair.zip",
+  "sha256": "52d1d43fc56b093ff8f44e151b42894dee11fc283ed19243f7a53129e9a90e76"
+}

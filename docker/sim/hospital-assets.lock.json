@@ -1,0 +1,572 @@
+{
+  "aws_revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+  "models": {
+    "AdjTable": {
+      "name": "AdjTable",
+      "owner": "OpenRobotics",
+      "version": 4,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/AdjTable",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/AdjTable/4/AdjTable.zip",
+      "sha256": "f5c80739fb4fae8206344e0588a6a8d234ead1318ed8a06d6d1e8c82c92b4437"
+    },
+    "AnesthesiaMachine": {
+      "name": "AnesthesiaMachine",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/AnesthesiaMachine",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/AnesthesiaMachine/2/AnesthesiaMachine.zip",
+      "sha256": "a04a157ed5a93ac4d81519ab6ddeb4c8dd03f0ff76dfd36d5f215e67a928abe0"
+    },
+    "BMWCart": {
+      "name": "BMWCart",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BMWCart",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BMWCart/2/BMWCart.zip",
+      "sha256": "315dbb83a3d93904c67832c1cea9043ea9b1f6949cd6be9120b8c68647c1a0d8"
+    },
+    "BPCart": {
+      "name": "BPCart",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BPCart",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BPCart/2/BPCart.zip",
+      "sha256": "68266a1e2d67e64c0e6aa4a6cd563d83d6751f2883b54b4b1f42a88bdfdae4cb"
+    },
+    "BedTable": {
+      "name": "BedTable",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BedTable",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BedTable/2/BedTable.zip",
+      "sha256": "3a8ec34d5014d096f9ad3ae4dbd4c95df7b3ed749acfdec1c5c314256cffd085"
+    },
+    "BedsideTable": {
+      "name": "BedsideTable",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BedsideTable",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BedsideTable/2/BedsideTable.zip",
+      "sha256": "3d73df3e65ba665f9ad44632d5fcedcb24ecca26b9f96cb1964374262b038bfb"
+    },
+    "BloodPressureMonitor": {
+      "name": "BloodPressureMonitor",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BloodPressureMonitor",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BloodPressureMonitor/2/BloodPressureMonitor.zip",
+      "sha256": "1d8d49997fccca39e1bc992634d9f2a68500bf799ccca271c477d65e9475ba23"
+    },
+    "CGMClassic": {
+      "name": "CGMClassic",
+      "owner": "OpenRobotics",
+      "version": 4,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/CGMClassic",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/CGMClassic/4/CGMClassic.zip",
+      "sha256": "2f8366ef6c5650457ee0f1357956098fa1f4afe8caee983cd2d9b5284b40f6b7"
+    },
+    "Chair": {
+      "name": "Chair",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair/3/Chair.zip",
+      "sha256": "5bcf90f8177efdd373cf8099209372e6c13179113320db0a24c6f5f573a11e33"
+    },
+    "Drawer": {
+      "name": "Drawer",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Drawer",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Drawer/2/Drawer.zip",
+      "sha256": "5d53702e45435df493df51c05e559382c44d158b492f4ab5f992537a024e161d"
+    },
+    "ElderLadyPatient": {
+      "name": "ElderLadyPatient",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ElderLadyPatient",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ElderLadyPatient/2/ElderLadyPatient.zip",
+      "sha256": "56ecd1c48b672484d5f7dc129a8e789e77a6d0524b4c16556ee00b1f6be410c2"
+    },
+    "ElderMalePatient": {
+      "name": "ElderMalePatient",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ElderMalePatient",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ElderMalePatient/2/ElderMalePatient.zip",
+      "sha256": "db7e9d2235107aadfbf7b3360c2c286beeaf0b725b2144e87be56220db0af2aa"
+    },
+    "FemaleVisitor": {
+      "name": "FemaleVisitor",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitor",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitor/2/FemaleVisitor.zip",
+      "sha256": "5454b3bf1ac579851b9874179dcb0c30f6115996be8ad28290f5d0416c88f95e"
+    },
+    "FemaleVisitorSit": {
+      "name": "FemaleVisitorSit",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitorSit",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitorSit/2/FemaleVisitorSit.zip",
+      "sha256": "84d2a9c65c6e8841d9671e9cb871d2c3834ae303a0086d55f5d9e37a9579d1fd"
+    },
+    "IVStand": {
+      "name": "IVStand",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/IVStand",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/IVStand/2/IVStand.zip",
+      "sha256": "874383744f719ac95892f980fbd774fa31ef79c29cbe10252a234cbc8f25f848"
+    },
+    "InstrumentCart1": {
+      "name": "InstrumentCart1",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/InstrumentCart1",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/InstrumentCart1/2/InstrumentCart1.zip",
+      "sha256": "70b5ebb40b11a0cd702fe671d3708ca45f2dde6a3211603a2a69260039e7bb64"
+    },
+    "InstrumentCart2": {
+      "name": "InstrumentCart2",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/InstrumentCart2",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/InstrumentCart2/2/InstrumentCart2.zip",
+      "sha256": "b62a40f8a05386f365713d132cab2deb74b07da5168fb4c769531f602f981d70"
+    },
+    "KitchenSink": {
+      "name": "KitchenSink",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/KitchenSink",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/KitchenSink/2/KitchenSink.zip",
+      "sha256": "f75f80b5a5295d73200c99ed6d64be7f84eeb5dbe3a62c12e182b1cf4c5dbdea"
+    },
+    "MalePatientBed": {
+      "name": "MalePatientBed",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MalePatientBed",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MalePatientBed/2/MalePatientBed.zip",
+      "sha256": "4ac3f758e9f9400b45caf73747eceb4c7f682c5dc6478d7a9ee05707a729ea54"
+    },
+    "MaleVisitorOnPhone": {
+      "name": "MaleVisitorOnPhone",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorOnPhone",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorOnPhone/2/MaleVisitorOnPhone.zip",
+      "sha256": "b9d7538433569ddb9e62f21034490ff933a1db6d81a7895fff1a8a7d40742d22"
+    },
+    "MaleVisitorSit": {
+      "name": "MaleVisitorSit",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorSit",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorSit/2/MaleVisitorSit.zip",
+      "sha256": "7bba6117aa8b1de518801c9b14a66600026adc28e531f3e58b6c758ca10914d3"
+    },
+    "MetalCabinet": {
+      "name": "MetalCabinet",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MetalCabinet",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MetalCabinet/2/MetalCabinet.zip",
+      "sha256": "c2644af380a622d1cb3ef0fce40d69ad1dcd8ce49416bcae4d36d0274e9dbea5"
+    },
+    "MopCart3": {
+      "name": "MopCart3",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MopCart3",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MopCart3/2/MopCart3.zip",
+      "sha256": "54e9e9db2d1a32d342709b540df5d5d290d04f474ad2ef72c78adb60dcfe2821"
+    },
+    "OfficeChairBlack": {
+      "name": "OfficeChairBlack",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairBlack",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairBlack/2/OfficeChairBlack.zip",
+      "sha256": "c1984e58808c4a3660d597c8d3fc34126d7812fb2f3b3f905de2a73897ea7eae"
+    },
+    "ParkingTrolleyMax": {
+      "name": "ParkingTrolleyMax",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ParkingTrolleyMax",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ParkingTrolleyMax/3/ParkingTrolleyMax.zip",
+      "sha256": "807eaa4b6eeb05f4ff9085310f238f6ab3399ce5f29b83ee38db3ed9413ff411"
+    },
+    "ParkingTrolleyMin": {
+      "name": "ParkingTrolleyMin",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ParkingTrolleyMin",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ParkingTrolleyMin/3/ParkingTrolleyMin.zip",
+      "sha256": "9f842baaf6977e11a5c413366d2ffa0fe0a5eb5a4a2ea42df72a70a6309c3073"
+    },
+    "PatientFSit": {
+      "name": "PatientFSit",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientFSit",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientFSit/2/PatientFSit.zip",
+      "sha256": "23c94538b01818d163e5df4d93aef8e88fd2201e57dbf08a85d9a4a3fcc7aefa"
+    },
+    "PatientWheelChair": {
+      "name": "PatientWheelChair",
+      "owner": "OpenRobotics",
+      "version": 4,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientWheelChair",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientWheelChair/4/PatientWheelChair.zip",
+      "sha256": "52d1d43fc56b093ff8f44e151b42894dee11fc283ed19243f7a53129e9a90e76"
+    },
+    "PotatoChipChair": {
+      "name": "PotatoChipChair",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PotatoChipChair",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PotatoChipChair/3/PotatoChipChair.zip",
+      "sha256": "97ea8b33161f6ca424e45065d01af8f54aea0c1f2db544b27e5203313e675fbd"
+    },
+    "Scrubs": {
+      "name": "Scrubs",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Scrubs",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Scrubs/2/Scrubs.zip",
+      "sha256": "1e4a5fbdfc8d02c688290d1c4e39430ec872bf3f976c5fc720cf6e98c740aea7"
+    },
+    "Shower": {
+      "name": "Shower",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Shower",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Shower/2/Shower.zip",
+      "sha256": "cac1b4f5986ec9e20e8c14a35a9f6a0b61a754c4c84b79d9d5465f104d88bdb7"
+    },
+    "StorageRack": {
+      "name": "StorageRack",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRack",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRack/2/StorageRack.zip",
+      "sha256": "8828cfa9ebbcc7652a71e9eb7ae8191190ccd3c0b76c75530b2d7e6abaae2e7e"
+    },
+    "StorageRackCoverOpen": {
+      "name": "StorageRackCoverOpen",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRackCoverOpen",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRackCoverOpen/2/StorageRackCoverOpen.zip",
+      "sha256": "5dbaa6e783b1c4e24e62101db6dca0e0074138ce2eb50479fb86eb29efa5c710"
+    },
+    "StorageRackCovered": {
+      "name": "StorageRackCovered",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRackCovered",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRackCovered/2/StorageRackCovered.zip",
+      "sha256": "fc94bfaf762d7c39e8a2ed27aa2f2172717d2a005cd416b172357a78fc995426"
+    },
+    "SurgicalTrolley": {
+      "name": "SurgicalTrolley",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/SurgicalTrolley",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/SurgicalTrolley/2/SurgicalTrolley.zip",
+      "sha256": "651f5553c160be33395eb3e7e40520e8d38c74d350cc649ca9e6870d48b8d5b7"
+    },
+    "SurgicalTrolleyMed": {
+      "name": "SurgicalTrolleyMed",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/SurgicalTrolleyMed",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/SurgicalTrolleyMed/2/SurgicalTrolleyMed.zip",
+      "sha256": "f4c29738dfe4af280dcfbed0f9fa1e1affa1e60792d6a936fa386ba1b48b5519"
+    },
+    "Toilet": {
+      "name": "Toilet",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Toilet",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Toilet/2/Toilet.zip",
+      "sha256": "27f2bf063764bf8ff7f0e0d1599457902daa87c03d58e7b2a6e1e5b4fec18d86"
+    },
+    "TrolleyBed": {
+      "name": "TrolleyBed",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/TrolleyBed",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/TrolleyBed/3/TrolleyBed.zip",
+      "sha256": "7eaa8144f09b715ed8ff6768c80de6cc4b44447cc6a0449f18549c509f701cd7"
+    },
+    "TrolleyBedPatient": {
+      "name": "TrolleyBedPatient",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/TrolleyBedPatient",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/TrolleyBedPatient/3/TrolleyBedPatient.zip",
+      "sha256": "46ddf111c7698ce2f4096977181b18d6a8594f8c7873c7f38665ccf81b1d684b"
+    },
+    "VendingMachine": {
+      "name": "VendingMachine",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/VendingMachine",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/VendingMachine/3/VendingMachine.zip",
+      "sha256": "ef8c9b5f62b815dbc3866d6439556de82819b4bb7363248cf2f5df94fc4d9c5c"
+    },
+    "VisitorKidSit": {
+      "name": "VisitorKidSit",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit/2/VisitorKidSit.zip",
+      "sha256": "c913b16f720e9e044ee8f524ba14676a25807ca76f98f2f1bd0d2a15c1362122"
+    },
+    "WhiteChipChair": {
+      "name": "WhiteChipChair",
+      "owner": "OpenRobotics",
+      "version": 3,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteChipChair",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteChipChair/3/WhiteChipChair.zip",
+      "sha256": "a1f3ab975862ae39fbcb39b1722731a9cf41670b0db5b23cca6f43dc868d0e3c"
+    },
+    "XRayMachine": {
+      "name": "XRayMachine",
+      "owner": "OpenRobotics",
+      "version": 2,
+      "license_name": "Creative Commons Attribution 4.0 International",
+      "license_url": "http://creativecommons.org/licenses/by/4.0/",
+      "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/XRayMachine",
+      "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/XRayMachine/2/XRayMachine.zip",
+      "sha256": "353d10ac99d34ede865949fa09d0df73ff18deac53c39f35b9347ffe4ebd1f94"
+    },
+    "aws_robomaker_hospital_curtain_closed_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_curtain_half_open_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_curtain_open_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_elevator_01_car": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_elevator_01_door": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_elevator_01_portal": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_floor_01_ceiling": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_floor_01_floor": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_floor_01_walls": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_nursesstation_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_hospital_ramp_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_residential_Carpet_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_residential_CoffeeTable_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_residential_KitchenCabinet_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_residential_PortraitA_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0",
+      "collada_textures": "resolved to packaged model textures"
+    },
+    "aws_robomaker_residential_PortraitD_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0",
+      "collada_textures": "resolved to packaged model textures"
+    },
+    "aws_robomaker_residential_PortraitD_02": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0",
+      "collada_textures": "resolved to packaged model textures"
+    },
+    "aws_robomaker_residential_PortraitE_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0",
+      "collada_textures": "resolved to packaged model textures"
+    },
+    "aws_robomaker_residential_PortraitE_02": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0",
+      "collada_textures": "resolved to packaged model textures"
+    },
+    "aws_robomaker_residential_Refrigerator_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0",
+      "collada_textures": "resolved to packaged model textures"
+    },
+    "aws_robomaker_residential_SofaB_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_residential_Sofa_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0",
+      "collada_textures": "resolved to packaged model textures"
+    },
+    "aws_robomaker_residential_TV_02": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_residential_Trash_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_warehouse_ClutteringA_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    },
+    "aws_robomaker_warehouse_ClutteringC_01": {
+      "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+      "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+      "license": "MIT-0"
+    }
+  }
+}

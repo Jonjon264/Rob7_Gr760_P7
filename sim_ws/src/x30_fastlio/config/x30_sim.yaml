@@ -1,0 +1,51 @@
+# FAST-LIO2 parameters for the simulated X30. Starts from fast_lio/config/mid360.yaml (the real-robot config).
+/**:
+    ros__parameters:
+        feature_extract_enable: false
+        point_filter_num: 1            # the adapter already keeps every 3rd valid point (livox_adapter decimate)
+        max_iteration: 3
+        filter_size_surf: 0.5
+        filter_size_map: 0.5
+        cube_side_length: 1000.0
+        runtime_pos_log_enable: false
+        map_file_path: "./test.pcd"
+
+        common:
+            lid_topic:  "/livox/lidar"   # output of livox_adapter
+            imu_topic:  "/imu/data"      # sim IMU, frame imu_link, 200 Hz
+            time_sync_en: false
+            time_offset_lidar_to_imu: 0.0
+
+        preprocess:
+            lidar_type: 1                # Livox CustomMsg
+            scan_line:  16               # sim cloud: 4 lidars x 4 lines, line = 4 * lidar_index + (0..3). FAST-LIO drops line >= scan_line
+            blind: 0.5                   # drop points within 0.5 m of the lidar frame: the body, and the sim's "no return" points at the mounts
+            timestamp_unit: 3
+            scan_rate: 10
+
+        mapping:
+            acc_cov: 0.1
+            gyr_cov: 0.1
+            b_acc_cov: 0.0001
+            b_gyr_cov: 0.0001
+            fov_degree:    360.0
+            det_range:     40.0          # sim lidar range_max_m
+            extrinsic_est_en:  false     # the mounting is known exactly in the sim
+            # Pose of the lidar frame (= base_link, where the merged cloud is expressed) in the IMU frame:
+            # imu_link sits at (0.13045, -0.001, 0.0149) in base_link, so base_link is at the negative of that in imu_link.
+            extrinsic_T: [ -0.13045, 0.001, -0.0149 ]
+            extrinsic_R: [ 1., 0., 0.,
+                           0., 1., 0.,
+                           0., 0., 1.]
+
+        publish:
+            path_en: true
+            effect_map_en: false
+            map_en: true
+            scan_publish_en:  true
+            dense_publish_en: false
+            scan_bodyframe_pub_en: true
+
+        pcd_save:
+            pcd_save_en: false           # would write into the mounted source tree
+            interval: -1

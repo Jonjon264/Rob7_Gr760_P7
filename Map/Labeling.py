@@ -4,7 +4,7 @@ import json
 import numpy as np
 
 path = os.path.expanduser(
-    "~/Project/Rob7_Gr760_P7/Map/MapFiles/Map1/jueying.pgm"
+    "~/Map/MapFiles/Map1/jueying.pgm"
 )
 
 map_img = cv.imread(path, cv.IMREAD_GRAYSCALE)

@@ -1,0 +1,10 @@
+{
+  "name": "Toilet",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Toilet",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Toilet/2/Toilet.zip",
+  "sha256": "27f2bf063764bf8ff7f0e0d1599457902daa87c03d58e7b2a6e1e5b4fec18d86"
+}

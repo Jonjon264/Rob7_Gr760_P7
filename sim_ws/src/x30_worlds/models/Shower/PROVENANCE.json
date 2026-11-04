@@ -1,0 +1,10 @@
+{
+  "name": "Shower",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Shower",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Shower/2/Shower.zip",
+  "sha256": "cac1b4f5986ec9e20e8c14a35a9f6a0b61a754c4c84b79d9d5465f104d88bdb7"
+}

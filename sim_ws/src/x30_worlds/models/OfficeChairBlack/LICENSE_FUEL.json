@@ -1,0 +1,10 @@
+{
+  "name": "OfficeChairBlack",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairBlack",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairBlack/2/OfficeChairBlack.zip",
+  "sha256": "c1984e58808c4a3660d597c8d3fc34126d7812fb2f3b3f905de2a73897ea7eae"
+}

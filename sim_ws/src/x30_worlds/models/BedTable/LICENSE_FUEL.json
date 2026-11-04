@@ -1,0 +1,10 @@
+{
+  "name": "BedTable",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BedTable",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BedTable/2/BedTable.zip",
+  "sha256": "3a8ec34d5014d096f9ad3ae4dbd4c95df7b3ed749acfdec1c5c314256cffd085"
+}

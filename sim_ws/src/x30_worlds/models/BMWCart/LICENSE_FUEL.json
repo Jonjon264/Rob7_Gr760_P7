@@ -1,0 +1,10 @@
+{
+  "name": "BMWCart",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BMWCart",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BMWCart/2/BMWCart.zip",
+  "sha256": "315dbb83a3d93904c67832c1cea9043ea9b1f6949cd6be9120b8c68647c1a0d8"
+}

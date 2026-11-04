@@ -1,0 +1,10 @@
+{
+  "name": "Drawer",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Drawer",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Drawer/2/Drawer.zip",
+  "sha256": "5d53702e45435df493df51c05e559382c44d158b492f4ab5f992537a024e161d"
+}

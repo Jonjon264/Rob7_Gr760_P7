@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>qwen_voice_manager</name>
+  <version>0.1.0</version>
+  <description>Existing ask_qwen speech recorder and Qwen agent as a ROS 2 manager.</description>
+  <maintainer email="maintainer@example.com">ROB7</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_python</buildtool_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>robot_task_handler</exec_depend>
+  <!-- Python-only deps with no rosdep key (openai, RealtimeSTT, pvporcupine, torch) are pip-installed from
+       requirements-voice.txt by docker/sim/Dockerfile. -->
+  <test_depend>interfaces</test_depend>
+  <test_depend>python3-pytest</test_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

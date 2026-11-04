@@ -1,0 +1,22 @@
+# Microphone passthrough for the Qwen voice manager (speech_enabled:=true), same mechanism as docker/main.
+# gui.sh adds this file when SIM_AUDIO=true. Requires a PulseAudio/PipeWire-pulse server on the host.
+services:
+  sim:
+    devices:
+      - /dev/snd:/dev/snd
+    environment:
+      PULSE_SERVER: unix:/tmp/pulse-native
+      PULSE_COOKIE: /tmp/pulse-cookie
+    volumes:
+      - type: bind
+        source: ${XDG_RUNTIME_DIR:-/run/user/1000}/pulse/native
+        target: /tmp/pulse-native
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${HOME}/.config/pulse/cookie
+        target: /tmp/pulse-cookie
+        read_only: true
+        bind:
+          create_host_path: false

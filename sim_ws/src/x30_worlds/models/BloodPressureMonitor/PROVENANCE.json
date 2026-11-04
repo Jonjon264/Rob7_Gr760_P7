@@ -1,0 +1,10 @@
+{
+  "name": "BloodPressureMonitor",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BloodPressureMonitor",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BloodPressureMonitor/2/BloodPressureMonitor.zip",
+  "sha256": "1d8d49997fccca39e1bc992634d9f2a68500bf799ccca271c477d65e9475ba23"
+}

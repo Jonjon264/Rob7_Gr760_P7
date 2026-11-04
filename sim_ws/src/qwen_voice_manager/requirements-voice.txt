@@ -1,0 +1,8 @@
+# Jazzy / Ubuntu 24.04 (Python 3.12). torch and torchaudio are installed first from the CPU index
+# by docker/sim/Dockerfile. numpy matches Noble's python3-numpy, so apt's copy satisfies it.
+RealtimeSTT==0.3.104
+pvporcupine==1.9.5
+openai>=1.0,<4
+numpy==1.26.4
+# faster-whisper (pulled in by RealtimeSTT) imports requests but no longer gets it from huggingface-hub
+requests

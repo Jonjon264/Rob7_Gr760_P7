@@ -8,12 +8,25 @@ services:
     ipc: host
     stdin_open: true
     tty: true
-    devices:
-      - /dev/snd:/dev/snd
+    # Microphone and speaker access goes through the host PulseAudio server.
     volumes:
       - type: bind
         source: ../../ros2_ws
         target: /root/ros2_ws
+
+      # Piper requires the voice model and its companion configuration.
+      - type: bind
+        source: ../../AI_Interface/en_US-hfc_male-medium.onnx
+        target: /opt/piper/en_US-hfc_male-medium.onnx
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ../../AI_Interface/en_US-hfc_male-medium.onnx.json
+        target: /opt/piper/en_US-hfc_male-medium.onnx.json
+        read_only: true
+        bind:
+          create_host_path: false
 
       # Connect to the host audio server
       - type: bind
@@ -29,7 +42,8 @@ services:
       - ROS_DOMAIN_ID=0
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
+      - PIPER_MODEL=/opt/piper/en_US-hfc_male-medium.onnx
 
-      # Tell audio applications how to connect
+      # Tell audio applications how to connect ( kun på mit pc, skal nok slettes)
       - PULSE_SERVER=unix:/tmp/pulse-native
       - PULSE_COOKIE=/tmp/pulse-cookie

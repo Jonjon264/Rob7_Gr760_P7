@@ -1,0 +1,10 @@
+{
+  "name": "PatientFSit",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientFSit",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientFSit/2/PatientFSit.zip",
+  "sha256": "23c94538b01818d163e5df4d93aef8e88fd2201e57dbf08a85d9a4a3fcc7aefa"
+}

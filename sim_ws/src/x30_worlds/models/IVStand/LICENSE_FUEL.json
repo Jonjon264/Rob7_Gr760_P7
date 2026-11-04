@@ -1,0 +1,10 @@
+{
+  "name": "IVStand",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/IVStand",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/IVStand/2/IVStand.zip",
+  "sha256": "874383744f719ac95892f980fbd774fa31ef79c29cbe10252a234cbc8f25f848"
+}

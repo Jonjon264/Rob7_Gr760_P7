@@ -1,0 +1,8 @@
+#!/bin/bash
+# Save the map SLAM Toolbox is building to configs/maps/<world>/map.{yaml,pgm}.
+# Usage: ros2 run x30_navigation save_map [world]
+set -e
+world="${1:-aws_hospital}"
+dir="${X30_ROOT:-/x30}/configs/maps/$world"
+mkdir -p "$dir"
+exec ros2 run nav2_map_server map_saver_cli -f "$dir/map" --ros-args -p save_map_timeout:=10.0 -p use_sim_time:=true

@@ -2,6 +2,7 @@
 
 import json
 import importlib.util
+import os
 from pathlib import Path
 from queue import Empty, Queue
 import re
@@ -23,7 +24,7 @@ def load_project_module(name):
 
 
 class VoiceManager(Node):
-    def __init__(self, agent=None, recorder_factory=None, **kwargs):
+    def __init__(self, agent=None, recorder_factory=None, reply_player=None, **kwargs):
         super().__init__('qwen_voice_manager', **kwargs)
         config = Path(get_package_share_directory('qwen_voice_manager')) / 'config'
         self.declare_parameter('command_topic', 'manager/commands')
@@ -37,6 +38,10 @@ class VoiceManager(Node):
         self.declare_parameter('map_file', str(config / 'map.json'))
         self.declare_parameter('rules_file', str(config / 'rules.txt'))
         self.declare_parameter('request_timeout', 30.0)
+        self.declare_parameter('tts_enabled', True)
+        self.declare_parameter('tts_model', os.environ.get(
+            'PIPER_MODEL', '/opt/piper/en_US-hfc_male-medium.onnx'))
+        self.declare_parameter('output_device_index', -1)
 
         if agent is None:
             QwenAgent = load_project_module('qwen_agent').QwenAgent
@@ -69,6 +74,16 @@ class VoiceManager(Node):
             String, self.get_parameter('text_topic').value,
             lambda message: self.submit_text(message.data), 10)
         self._timer = self.create_timer(0.05, self._publish_pending)
+        self._handle_reply = load_project_module('ask_qwen').handle_reply
+        self._reply_player = reply_player
+        if self._reply_player is None and self.get_parameter('tts_enabled').value:
+            ReplyPlayer = load_project_module('reply_audio').ReplyPlayer
+            output_device = self.get_parameter('output_device_index').value
+            self._reply_player = ReplyPlayer(
+                model_path=self.get_parameter('tts_model').value,
+                device=output_device if output_device >= 0 else None,
+                on_error=self.get_logger().error,
+            )
         self._model_thread = threading.Thread(target=self._model_loop, daemon=True)
         self._model_thread.start()
         self._speech_thread = None
@@ -88,7 +103,10 @@ class VoiceManager(Node):
         with self._lock:
             if normalized in {'stop', 'stop now', 'cancel', 'cancel task', 'cancel the task', 'abort'}:
                 self._generation += 1
-                self._results.put((self._generation, {'action': 'cancel'}))
+                self._results.put((
+                    self._generation, {'action': 'cancel'},
+                    'I will cancel the current task.',
+                ))
             else:
                 self._requests.put((self._generation, text))
 
@@ -102,17 +120,18 @@ class VoiceManager(Node):
                 if generation != self._generation:
                     continue
             try:
-                result = self.agent.ask(text)
+                commands, reply = self.agent.ask(text)
             except Exception as exc:
                 # Keep listening after endpoint, file, or inference failures.
-                result = {'action': 'error', 'message': f'Qwen request failed: {type(exc).__name__}'}
+                commands = {'action': 'error', 'message': f'Qwen request failed: {type(exc).__name__}'}
+                reply = 'I could not process that request.'
             with self._lock:
                 if generation != self._generation or self._closed.is_set():
                     continue
-                if result == {'action': 'cancel'}:
+                if isinstance(commands, dict) and commands.get('action') == 'cancel':
                     self._generation += 1
                     generation = self._generation
-                self._results.put((generation, result))
+                self._results.put((generation, commands, reply))
 
     def _publish_pending(self):
         while not self._transcripts.empty():
@@ -124,15 +143,28 @@ class VoiceManager(Node):
             self.transcript_publisher.publish(String(data=text))
         while not self._results.empty():
             try:
-                generation, result = self._results.get_nowait()
+                generation, commands, reply = self._results.get_nowait()
             except Empty:
                 break
             with self._lock:
-                if generation != self._generation:
+                if generation != self._generation or self._closed.is_set():
                     continue
-                payload = json.dumps(result, allow_nan=False)
+                payload = json.dumps(commands, allow_nan=False)
                 self.command_publisher.publish(String(data=payload))
             self.get_logger().info(f'Manager output: {payload}')
+            try:
+                # Commands are published before touching any audio device.
+                if (self._reply_player is not None and isinstance(commands, dict)
+                        and commands.get('action') == 'cancel'):
+                    self._reply_player.cancel()
+                with self._lock:
+                    if generation != self._generation or self._closed.is_set():
+                        continue
+                    if self._reply_player is not None:
+                        self._reply_player.submit(reply)
+                self._handle_reply(reply)
+            except Exception as exc:
+                self.get_logger().error(f'Reply handler failed: {type(exc).__name__}')
 
     def _speech_loop(self):
         recorder = None
@@ -176,8 +208,12 @@ class VoiceManager(Node):
                 recorder.shutdown()
 
     def close(self):
+        if self._closed.is_set():
+            return
         self._closed.set()
         self._requests.put(None)
+        if self._reply_player is not None:
+            self._reply_player.close()
         with self._lock:
             recorder = self._recorder
             self._recorder = None

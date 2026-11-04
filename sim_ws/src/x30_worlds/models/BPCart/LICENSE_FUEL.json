@@ -1,0 +1,10 @@
+{
+  "name": "BPCart",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BPCart",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/BPCart/2/BPCart.zip",
+  "sha256": "68266a1e2d67e64c0e6aa4a6cd563d83d6751f2883b54b4b1f42a88bdfdae4cb"
+}

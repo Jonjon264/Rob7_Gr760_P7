@@ -1,0 +1,10 @@
+{
+  "name": "XRayMachine",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/XRayMachine",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/XRayMachine/2/XRayMachine.zip",
+  "sha256": "353d10ac99d34ede865949fa09d0df73ff18deac53c39f35b9347ffe4ebd1f94"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "MalePatientBed",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MalePatientBed",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MalePatientBed/2/MalePatientBed.zip",
+  "sha256": "4ac3f758e9f9400b45caf73747eceb4c7f682c5dc6478d7a9ee05707a729ea54"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "KitchenSink",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/KitchenSink",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/KitchenSink/2/KitchenSink.zip",
+  "sha256": "f75f80b5a5295d73200c99ed6d64be7f84eeb5dbe3a62c12e182b1cf4c5dbdea"
+}

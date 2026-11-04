@@ -1,0 +1,10 @@
+{
+  "name": "ParkingTrolleyMin",
+  "owner": "OpenRobotics",
+  "version": 3,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ParkingTrolleyMin",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/ParkingTrolleyMin/3/ParkingTrolleyMin.zip",
+  "sha256": "9f842baaf6977e11a5c413366d2ffa0fe0a5eb5a4a2ea42df72a70a6309c3073"
+}

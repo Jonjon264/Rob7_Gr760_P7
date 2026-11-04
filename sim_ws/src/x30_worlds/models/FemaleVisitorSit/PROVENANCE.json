@@ -1,0 +1,10 @@
+{
+  "name": "FemaleVisitorSit",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitorSit",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitorSit/2/FemaleVisitorSit.zip",
+  "sha256": "84d2a9c65c6e8841d9671e9cb871d2c3834ae303a0086d55f5d9e37a9579d1fd"
+}

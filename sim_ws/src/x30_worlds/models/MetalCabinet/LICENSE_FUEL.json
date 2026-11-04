@@ -1,0 +1,10 @@
+{
+  "name": "MetalCabinet",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MetalCabinet",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/MetalCabinet/2/MetalCabinet.zip",
+  "sha256": "c2644af380a622d1cb3ef0fce40d69ad1dcd8ce49416bcae4d36d0274e9dbea5"
+}

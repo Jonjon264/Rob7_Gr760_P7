@@ -1,0 +1,10 @@
+{
+  "name": "VisitorKidSit",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit/2/VisitorKidSit.zip",
+  "sha256": "c913b16f720e9e044ee8f524ba14676a25807ca76f98f2f1bd0d2a15c1362122"
+}

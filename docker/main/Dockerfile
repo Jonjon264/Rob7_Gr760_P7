@@ -16,9 +16,10 @@ RUN apt update && \
         python3-dev \
         build-essential \
         portaudio19-dev \
+        libportaudio2 \
         libsndfile1 \
         libasound2-plugins \
-        pulseaudio-utils \        
+        pulseaudio-utils \
         libgomp1 \
         alsa-utils \
     	libpcl-dev \

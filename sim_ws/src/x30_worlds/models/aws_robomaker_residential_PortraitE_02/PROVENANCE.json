@@ -1,0 +1,6 @@
+{
+  "source": "https://github.com/aws-robotics/aws-robomaker-hospital-world.git",
+  "revision": "39969a9d250135835cf13b480865647d1a87b6f4",
+  "license": "MIT-0",
+  "collada_textures": "resolved to packaged model textures"
+}

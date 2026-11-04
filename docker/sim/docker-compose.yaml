@@ -1,0 +1,51 @@
+# From the repository root:
+#   docker compose -f docker/sim/docker-compose.yaml build
+#   docker compose -f docker/sim/docker-compose.yaml up -d
+#   docker compose -f docker/sim/docker-compose.yaml exec sim bash
+#   docker compose -f docker/sim/docker-compose.yaml down
+name: rob7-sim
+
+services:
+  sim:
+    image: rob7-x30-sim:jazzy
+    build:
+      context: ../..
+      dockerfile: docker/sim/Dockerfile
+      args:
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
+        BUILD_JOBS: ${SIM_BUILD_JOBS:-4}
+    container_name: x30_Sim
+    init: true
+    stdin_open: true
+    tty: true
+    command: ["sleep", "infinity"]
+    shm_size: 2gb
+    environment:
+      # Separate from the existing robot stack (domain 0) during initial setup.
+      ROS_DOMAIN_ID: ${SIM_ROS_DOMAIN_ID:-10}
+      CYCLONEDDS_URI: file:///etc/cyclonedds.xml
+      LP_NUM_THREADS: ${SIM_RENDER_THREADS:-4}
+      X30_BUILD_JOBS: ${SIM_BUILD_JOBS:-4}
+    volumes:
+      - ./cyclonedds.xml:/etc/cyclonedds.xml:ro
+      - type: bind
+        source: ../..
+        target: /x30
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ../../sim_ws/src
+        target: /ws/src
+        bind:
+          create_host_path: false
+      # Jazzy build artifacts never share the Humble workspace directories.
+      - sim_build:/ws/build
+      - sim_install:/ws/install
+      - sim_log:/ws/log
+    # Communication with the Humble stack is configured in a later step.
+
+volumes:
+  sim_build:
+  sim_install:
+  sim_log:

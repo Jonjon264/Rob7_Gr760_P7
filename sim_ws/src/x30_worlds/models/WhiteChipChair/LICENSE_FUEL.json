@@ -1,0 +1,10 @@
+{
+  "name": "WhiteChipChair",
+  "owner": "OpenRobotics",
+  "version": 3,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteChipChair",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteChipChair/3/WhiteChipChair.zip",
+  "sha256": "a1f3ab975862ae39fbcb39b1722731a9cf41670b0db5b23cca6f43dc868d0e3c"
+}

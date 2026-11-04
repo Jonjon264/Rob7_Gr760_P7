@@ -1,0 +1,10 @@
+{
+  "name": "StorageRack",
+  "owner": "OpenRobotics",
+  "version": 2,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRack",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/StorageRack/2/StorageRack.zip",
+  "sha256": "8828cfa9ebbcc7652a71e9eb7ae8191190ccd3c0b76c75530b2d7e6abaae2e7e"
+}

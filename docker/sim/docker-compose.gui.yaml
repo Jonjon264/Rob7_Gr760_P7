@@ -1,0 +1,32 @@
+# Native Linux desktop. gui.sh prepares an Xauthority file for this overlay.
+services:
+  sim:
+    # Mesa's X11 software renderer shares image buffers with the host X server.
+    ipc: host
+    environment:
+      DISPLAY: ${DISPLAY:?Run from a desktop session with DISPLAY set}
+      XAUTHORITY: /tmp/x30-sim.xauthority
+      QT_QPA_PLATFORM: xcb
+      QT_X11_NO_MITSHM: "1"
+    volumes:
+      - type: bind
+        source: /tmp/.X11-unix
+        target: /tmp/.X11-unix
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${SIM_XAUTHORITY:-/dev/null}
+        target: /tmp/x30-sim.xauthority
+        read_only: true
+        bind:
+          create_host_path: false
+    command:
+      - ros2
+      - launch
+      - x30_sim
+      - sim.launch.py
+      - world:=${SIM_WORLD:-default_arena}
+      - locomotion:=${SIM_LOCOMOTION:-legged}
+      - gui:=true
+      - joystick:=${SIM_JOYSTICK:-true}

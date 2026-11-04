@@ -1,0 +1,10 @@
+{
+  "name": "AdjTable",
+  "owner": "OpenRobotics",
+  "version": 4,
+  "license_name": "Creative Commons Attribution 4.0 International",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "source": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/AdjTable",
+  "archive": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/AdjTable/4/AdjTable.zip",
+  "sha256": "f5c80739fb4fae8206344e0588a6a8d234ead1318ed8a06d6d1e8c82c92b4437"
+}

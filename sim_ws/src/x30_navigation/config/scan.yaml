@@ -1,0 +1,17 @@
+# 3D lidar cloud -> 2D scan for SLAM Toolbox, AMCL, the costmaps and the collision monitor.
+# base_link sits at body height; the floor is about 0.4 m below it. The lidar looks from -7 to +52 deg, so a wide band
+# (up to 1.2 m above the body) is needed for walls to appear in the scan at all ranges.
+pointcloud_to_laserscan:
+  ros__parameters:
+    target_frame: base_link
+    transform_tolerance: 0.1
+    min_height: -0.25
+    max_height: 1.2
+    angle_min: -3.14159
+    angle_max: 3.14159
+    angle_increment: 0.00436     # 0.25 deg
+    scan_time: 0.1
+    range_min: 0.6               # skips the robot's own legs and body (returns at 0.47-0.55 m) and the sim's "no return" points
+    range_max: 20.0
+    use_inf: true
+    inf_epsilon: 1.0
