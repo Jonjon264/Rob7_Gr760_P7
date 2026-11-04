@@ -1,2 +1,3 @@
 string goalid
+int16 wait_time
 geometry_msgs/PoseStamped goal

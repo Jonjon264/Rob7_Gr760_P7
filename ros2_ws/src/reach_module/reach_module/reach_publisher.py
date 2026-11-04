@@ -36,6 +36,8 @@ class ReachPublisher(Node):
         self.queue = deque()
         self.current_id = None
         self.cancel_current = False
+        self.current_wait_time = 0
+        self.wait_timer = None
 
     def goal_callback(self, message: GoalArray) -> None:
 
@@ -63,6 +65,8 @@ class ReachPublisher(Node):
             self.send_next()
             return
 
+        self.current_wait_time = goal.wait_time
+
         msg = MoveBaseActionGoal()
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = "map"
@@ -74,6 +78,11 @@ class ReachPublisher(Node):
         msg.goal.target_pose.header.frame_id = "map"
         msg.goal.target_pose.pose.position.x = goal.goal.pose.position.x
         msg.goal.target_pose.pose.position.y = goal.goal.pose.position.y
+        msg.goal.target_pose.pose.position.z = goal.goal.pose.position.z
+        msg.goal.target_pose.pose.orientation.x = goal.goal.pose.orientation.x
+        msg.goal.target_pose.pose.orientation.y = goal.goal.pose.orientation.y
+        msg.goal.target_pose.pose.orientation.z = goal.goal.pose.orientation.z
+        msg.goal.target_pose.pose.orientation.w = goal.goal.pose.orientation.w
 
         self.goal_publisher.publish(msg)
         self.get_logger().info(
@@ -92,8 +101,13 @@ class ReachPublisher(Node):
         if status == GoalStatus.SUCCEEDED:
             self.get_logger().info(f'Goal {self.current_id} reached')
             self.cancel_current = False
-            self.send_next()
-
+            if self.current_wait_time > 0:
+                self.get_logger().info(
+                    f'Waiting {self.current_wait_time}s before next goal')
+                self.wait_timer = self.create_timer(
+                    float(self.current_wait_time), self.wait_done)
+            else:
+                self.send_next()
         elif self.cancel_current:
             self.get_logger().info(f'Goal {self.current_id} cancelled')
             self.cancel_current = False
@@ -106,8 +120,20 @@ class ReachPublisher(Node):
             self.queue.clear()
             self.current_id = None
 
+    def wait_done(self) -> None:
+        self.destroy_timer(self.wait_timer)   # makes it one-shot
+        self.wait_timer = None
+        self.send_next()
+
     def cancel_callback(self, message: std_msgs.msg.String) -> None:
 
+        if self.wait_timer is not None:      # goal already done, we're just waiting
+            self.destroy_timer(self.wait_timer)
+            self.wait_timer = None
+            self.get_logger().info(f'Cancelled wait after goal {message.data}')
+            self.send_next()
+            return
+        
         if message.data == self.current_id:
             self.get_logger().info(f'Cancelling current goal {message.data}')
             self.cancel_current = True #Comment out if not connected to robot
