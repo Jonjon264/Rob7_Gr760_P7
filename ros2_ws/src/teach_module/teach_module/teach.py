@@ -6,7 +6,7 @@ from rclpy.node import Node
 from interfaces.msg import CustomTeach
 from nav_msgs.msg import Odometry
 
-JSON_file = os.path.expanduser("~/ros2_ws/src/qwen_voice_manager/config/map.json")
+JSON_file = os.path.expanduser("~/ros2_ws/map.json")
 
 px, py, ox, oy, oz, ow = 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
 
