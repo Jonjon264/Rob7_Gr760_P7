@@ -22,5 +22,41 @@
         "y": 136,
         "name": "Tool Station",
         "descriptor": "Tools cabinet containing screwdrivers, saws, pliers and so on"
+    },
+    {
+        "x": 5.378559009857103,
+        "y": -6.523712747390009,
+        "orientation": [
+            -0.004808510133120736,
+            -0.003975158222929013,
+            0.12885788413371113,
+            0.9917107059746939
+        ],
+        "name": "Kitchen",
+        "descriptor": "Kitchen"
+    },
+    {
+        "x": 5.380753160368626,
+        "y": -6.539221353898458,
+        "orientation": [
+            -0.005309200986490639,
+            -0.003951140259405533,
+            0.12873808294477698,
+            0.9917254087579663
+        ],
+        "name": "Oswell's Writing Spot",
+        "descriptor": "Place where we teach Oswell how to write"
+    },
+    {
+        "x": 5.378383995051304,
+        "y": -6.53161316764238,
+        "orientation": [
+            -0.00497595727183885,
+            -0.003925532596504447,
+            0.12897497981255823,
+            0.9916967285873993
+        ],
+        "name": "Frederick's Tea Area",
+        "descriptor": "Where Frederick drinks his teas"
     }
 ]

@@ -58,3 +58,11 @@ topics:
     topic: /move_base/status
     type: actionlib_msgs/msg/GoalStatusArray
     queue_size: 10
+  -
+    topic: /odom
+    type: nav_msgs/msg/Odometry
+    queue_size: 10
+  -
+    topic: /planner_status
+    type: std_msgs/msg/Int32
+    queue_size: 10

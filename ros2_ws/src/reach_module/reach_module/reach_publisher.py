@@ -15,6 +15,7 @@ TERMINAL = {
     GoalStatus.RECALLED,    # 8
 }
 
+REACHED = 999   # placeholder, replace with the value you observe
 
 class ReachPublisher(Node):
 
@@ -27,17 +28,19 @@ class ReachPublisher(Node):
             GoalID, '/move_base/cancel', 10)
         self.create_subscription(
             GoalArray, '/robot/goals', self.goal_callback, 10)
-        self.create_subscription(
-            MoveBaseActionResult, '/move_base/result', self.result_callback, 10)
+        # self.create_subscription(
+        #     MoveBaseActionResult, '/move_base/result', self.result_callback, 10)
         self.create_subscription(
             std_msgs.msg.String, '/robot/cancel', self.cancel_callback, 10)
-
-
+        self.create_subscription(
+            std_msgs.msg.Int32, '/planner_status', self.planner_status_callback, 10)
         self.queue = deque()
         self.current_id = None
         self.cancel_current = False
         self.current_wait_time = 0
         self.wait_timer = None
+        self.last_planner_status = None
+
 
     def goal_callback(self, message: GoalArray) -> None:
 
@@ -88,19 +91,20 @@ class ReachPublisher(Node):
         self.get_logger().info(
             f'Sent goal {self.current_id} ({len(self.queue)} remaining)')
 
-        
-    def result_callback(self, message: MoveBaseActionResult) -> None:
 
-        if message.status.goal_id.id != self.current_id:
+
+    def planner_status_callback(self, msg: std_msgs.msg.Int32) -> None:
+        if self.current_id is None or self.wait_timer is not None:
             return
+        if msg.data != REACHED:
+            self.armed = True            # saw "not reached" since the goal was sent
+        elif self.armed:
+            self.armed = False
+            self.handle_result(GoalStatus.SUCCEEDED, '')
 
-        status = message.status.status
-        if status not in TERMINAL:
-            return
-
+    def handle_result(self, status, text) -> None:
         if status == GoalStatus.SUCCEEDED:
             self.get_logger().info(f'Goal {self.current_id} reached')
-            self.cancel_current = False
             if self.current_wait_time > 0:
                 self.get_logger().info(
                     f'Waiting {self.current_wait_time}s before next goal')
@@ -108,15 +112,10 @@ class ReachPublisher(Node):
                     float(self.current_wait_time), self.wait_done)
             else:
                 self.send_next()
-        elif self.cancel_current:
-            self.get_logger().info(f'Goal {self.current_id} cancelled')
-            self.cancel_current = False
-            self.send_next()
-
         else:
             self.get_logger().error(
-                f'Goal {self.current_id} ended with status {status}: '
-                f'{message.status.text}. Aborting remaining goals.')
+                f'Goal {self.current_id} failed ({status}): {text}. '
+                f'Aborting remaining goals.')
             self.queue.clear()
             self.current_id = None
 

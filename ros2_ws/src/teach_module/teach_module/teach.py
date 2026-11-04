@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 
 from interfaces.msg import CustomTeach
-from odometry_msgs.msg import odometry
+from nav_msgs.msg import Odometry
 
 JSON_file = os.path.expanduser("~/ros2_ws/src/qwen_voice_manager/config/map.json")
 
@@ -15,20 +15,20 @@ class Robot_sub(Node):
     def __init__(self):
         super().__init__('teach')
         self.subscription = self.create_subscription(
-            odometry,
-            '/odometry',
+            Odometry,
+            '/odom',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
         global px, py, ox, oy, oz, ow
-        px = msg.pose.position.x
-        py = msg.pose.position.y
-        ox = msg.pose.orientation.x
-        oy = msg.pose.orientation.y
-        oz = msg.pose.orientation.z
-        ow = msg.pose.orientation.w
+        px = msg.pose.pose.position.x
+        py = msg.pose.pose.position.y
+        ox = msg.pose.pose.orientation.x
+        oy = msg.pose.pose.orientation.y
+        oz = msg.pose.pose.orientation.z
+        ow = msg.pose.pose.orientation.w
 
 
 
