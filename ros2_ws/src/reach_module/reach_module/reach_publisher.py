@@ -5,6 +5,8 @@ from collections import deque
 from actionlib_msgs.msg import GoalStatus, GoalID
 from interfaces.msg import GoalArray
 from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseActionResult
+import socket
+import struct
 
 # Statuses that mean "move_base is done with this goal"
 TERMINAL = {
@@ -15,7 +17,13 @@ TERMINAL = {
     GoalStatus.RECALLED,    # 8
 }
 
-REACHED = 999   # placeholder, replace with the value you observe
+MOTION_HOST = ('192.168.137.103', 43893)
+
+CMD_HEARTBEAT      = 0x31040001
+CMD_CONFIRM_CONN   = 0x31020001
+CMD_TOGGLE_STEPPING = 0x31010201
+
+REACHED = 999 
 
 class ReachPublisher(Node):
 
@@ -40,8 +48,46 @@ class ReachPublisher(Node):
         self.current_wait_time = 0
         self.wait_timer = None
         self.last_planner_status = None
+        self.armed = False
+
+        # UDP link to the motion host
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.stepping = False   # our best guess of the robot's state
+        self.create_timer(0.2, self.send_heartbeat)   # 5 Hz, above the 2 Hz minimum
+        self.send_simple_command(CMD_CONFIRM_CONN)    # confirm connection once
+
+    """UDP stream commands"""
+    def send_simple_command(self, code: int, value: int = 0) -> None:
+        # CommandHead: code, parameters_size, type (simple command => 0), little endian
+        packet = struct.pack('<III', code, value, 0)
+        try:
+            self.sock.sendto(packet, MOTION_HOST)
+        except OSError as e:
+            self.get_logger().error(f'UDP send failed: {e}')
+
+    def send_heartbeat(self) -> None:
+        self.send_simple_command(CMD_HEARTBEAT)
+
+    def toggle_stepping(self) -> None:
+        self.send_simple_command(CMD_TOGGLE_STEPPING)
+        self.stepping = not self.stepping
+        self.get_logger().info(
+            f'Stepping {"started" if self.stepping else "stopped"}')
+
+    def start_stepping(self) -> None:
+        if self.stepping:
+            self.get_logger().info('Already stepping')
+            return
+        self.toggle_stepping()
+
+    def stop_stepping(self) -> None:
+        if not self.stepping:
+            self.get_logger().info('Already not stepping')
+            return
+        self.toggle_stepping()
 
 
+    """Robot commands"""
     def goal_callback(self, message: GoalArray) -> None:
 
         if not message.goals:
@@ -59,8 +105,10 @@ class ReachPublisher(Node):
         if not self.queue:
             self.current_id = None
             self.get_logger().info('All goals completed')
+            self.stop_stepping()
             return
-
+        
+        self.start_stepping()
         goal = self.queue.popleft()
 
         if not goal.goalid:
@@ -106,6 +154,7 @@ class ReachPublisher(Node):
         if status == GoalStatus.SUCCEEDED:
             self.get_logger().info(f'Goal {self.current_id} reached')
             if self.current_wait_time > 0:
+                self.stop_stepping()
                 self.get_logger().info(
                     f'Waiting {self.current_wait_time}s before next goal')
                 self.wait_timer = self.create_timer(
@@ -120,6 +169,7 @@ class ReachPublisher(Node):
             self.current_id = None
 
     def wait_done(self) -> None:
+        self.start_stepping()
         self.destroy_timer(self.wait_timer)   # makes it one-shot
         self.wait_timer = None
         self.send_next()
@@ -139,7 +189,7 @@ class ReachPublisher(Node):
             cancel_msg = GoalID()
             cancel_msg.id = self.current_id
             self.cancel_publisher.publish(cancel_msg)
-            #self.send_next() #Comment out if connected to robot
+            self.send_next() #Comment out if connected to robot
             return
         
         for goal in self.queue:
@@ -157,6 +207,9 @@ def main(args=None) -> None:
     try:
         rclpy.spin(node)
     finally:
+        node.destroy_node()
+        rclpy.shutdown()
+        node.sock.close()
         node.destroy_node()
         rclpy.shutdown()
 
