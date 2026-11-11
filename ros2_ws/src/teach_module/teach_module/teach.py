@@ -6,7 +6,7 @@ from rclpy.node import Node
 from interfaces.msg import CustomTeach
 from nav_msgs.msg import Odometry
 
-JSON_file = os.path.expanduser("~/ros2_ws/map.json")
+JSON_file = os.path.expanduser("~/ros2_ws/config/map.json")
 
 px, py, ox, oy, oz, ow = 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
 
@@ -57,6 +57,8 @@ class Qwen_sub(Node):
             teach_point(self, px, py, (ox, oy, oz, ow), place_id, description)
         elif action == 1:
             delete_point(self, place_id)
+        elif action == 2:
+            delete_this_point(self, px, py)
 
 
 
@@ -122,6 +124,34 @@ def delete_point(self, name):
         self.get_logger().info('Point deleted from JSON file.')
     else:
         self.get_logger().info('Could not find JSON file."')
+
+def delete_this_point(self, x, y):
+    #Deleting the closest point to the robot's current position from the JSON file
+    threshold_distance = 2.0
+    self.get_logger().info(f"Current position: x={x}, y={y}")
+    if os.path.exists(JSON_file):
+        with open(JSON_file, 'r') as file:
+            waypoints = json.load(file)
+            closest_point = None
+            closest_distance = float('inf')
+
+            for point in waypoints:
+                distance = ((point["x"] - x) ** 2 + (point["y"] - y) ** 2) ** 0.5
+                if distance < closest_distance:
+                    closest_distance = distance
+                    closest_point = point
+
+            if closest_point is not None and closest_distance < threshold_distance:
+                waypoints.remove(closest_point)
+
+            else:
+                self.get_logger().info(f'No point found within {threshold_distance} meters of the current position.')
+                return
+
+        with open(JSON_file, 'w') as file:
+            json.dump(waypoints, file, indent=4)
+
+        self.get_logger().info('Closest point deleted from JSON file.')
 
 
 
