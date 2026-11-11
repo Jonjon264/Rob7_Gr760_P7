@@ -1,53 +1,37 @@
+"""Command-line voice loop for trying the pipeline without ROS 2.
+
+    wake word -> speech -> Whisper -> Qwen -> printed commands and reply
+
+The ROS node (qwen_voice_manager/node.py) does the same with the real robot.
+"""
+
 import json
 
-import logging
 
-def on_start():
-    print(">>> [VAD] Speech detected! Recording...")
-
-def on_stop():
-    print(">>> [VAD] Silence detected! Transcribing...")
-
-
-def create_recorder(**overrides):
-    """Shared recorder configuration for this CLI and the ROS 2 voice node."""
-    from RealtimeSTT import AudioToTextRecorder
-
-    settings = dict(
-        model="base.en",
-        language="en",
-        device="cpu",
-        compute_type="int8",
-        spinner=False,
-        level=logging.ERROR,
-        on_recording_start=on_start,
-        on_recording_stop=on_stop,
-        wakeword_backend="pvporcupine", # Uses built-in Porcupine engine
-        wake_words="bumblebee",          # Free built-in keywords: "computer", "jarvis", "bumblebee", "alexa"
-        # --- VAD Fix Parameters ---
-        silero_sensitivity=0.3,              # Lowered (0.0 to 1.0) so room noise doesn't hold the mic open
-        webrtc_sensitivity=1,                # Less aggressive (0=least sensitive, 3=most sensitive)
-        silero_deactivity_detection=True,    # Uses Silero neural VAD instead of WebRTC to detect silence
-        post_speech_silence_duration=0.8     # Seconds of silence required to stop recording
-    )
-    settings.update(overrides)
-    return AudioToTextRecorder(**settings)
+def handle_reply(reply):
+    """Called with the human-facing reply text; here we just print it."""
+    if reply:
+        print(f"Reply: {reply}")
 
 
 def main():
+    from pi_recorder import PiRecorder
     from qwen_agent import QwenAgent
 
     agent = QwenAgent()
 
     def process_text(text):
         print(f"Transcribed: {text}")
-        print(json.dumps(agent.ask(text), indent=2))
-        with open("transcription.txt", "a", encoding="utf-8") as file:
-            file.write(f"{text}\n")
+        commands, reply = agent.ask(text)
+        print(json.dumps(commands, indent=2))
+        handle_reply(reply)
 
-    print("1. Loading Whisper and VAD models into memory (please wait)...")
-    recorder = create_recorder()
-    print("2. Models loaded! Speak into your microphone now...")
+    print("Loading wake-word, VAD and Whisper models (please wait)...")
+    recorder = PiRecorder(
+        on_recording_start=lambda: print(">>> Speech detected, recording..."),
+        on_recording_stop=lambda: print(">>> Silence detected, transcribing..."),
+    )
+    print("Ready. Say the wake word (hey jarvis), then your request.")
 
     try:
         while True:

@@ -17,6 +17,26 @@ def parse_json(text):
     return json.loads(text)
 
 
+def split_reply(output):
+    """Separate human-facing reply text from commands before validation.
+
+    Returns (commands without reply fields, one spoken string). The reply never
+    reaches validation or ROS 2, so it cannot alter task behavior.
+    """
+    items = output if isinstance(output, list) else [output]
+    commands, replies = [], []
+    for item in items:
+        if isinstance(item, dict) and "reply" in item:
+            item = dict(item)
+            reply = item.pop("reply")
+            if not isinstance(reply, str):
+                raise ValueError("reply must be a string")
+            if reply.strip():
+                replies.append(reply.strip())
+        commands.append(item)
+    return (commands if isinstance(output, list) else commands[0]), " ".join(replies)
+
+
 def validate(cmd, map_data):
     if isinstance(cmd, list):
         if not cmd:
@@ -87,7 +107,7 @@ def validate_task(cmd, map_data):
 class QwenAgent:
     def __init__(
         self,
-        base_url="https://circuit-eric-certificates-donation.trycloudflare.com/v1",
+        base_url="https://silk-band-magazines-accessories.trycloudflare.com/v1",
         api_key="4o5p5BXmiHPc5_RmWKnY7eAkdpSsnEpb37PQYSJiSDU",
         model="qwen3-vl",
         retries=1,
@@ -119,7 +139,7 @@ class QwenAgent:
         return response.choices[0].message.content
 
     def ask(self, text):
-        """Return a validated task list or standalone cancel/error object."""
+        """Return (validated task list or standalone cancel/error object, reply text)."""
         # re-read both files on every call so edits from other scripts apply immediately
         map_data = json.loads(self.map_file.read_text(encoding="utf-8-sig"))
         messages = [
@@ -130,11 +150,15 @@ class QwenAgent:
         for _ in range(self.retries + 1):
             reply = self._complete(messages)
             try:
-                return validate(parse_json(reply), map_data)
+                commands, spoken = split_reply(parse_json(reply))
+                return validate(commands, map_data), spoken
             except (ValueError, KeyError, AttributeError) as e:
                 error = e
                 messages += [
                     {"role": "assistant", "content": reply},
                     {"role": "user", "content": f"Invalid output ({e}). Reply again with valid JSON only, following the rules."},
                 ]
-        return {"action": "error", "message": f"invalid model output: {error}"}
+        return (
+            {"action": "error", "message": f"invalid model output: {error}"},
+            "I could not understand that request.",
+        )
