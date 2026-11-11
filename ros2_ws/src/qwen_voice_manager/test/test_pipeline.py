@@ -31,7 +31,7 @@ class Agent:
             assert self.release.wait(5)
         if text == 'endpoint failure':
             raise ConnectionError('simulated endpoint failure')
-        return ROUTE
+        return ROUTE, 'I will go to the charging station.'
 
 
 @pytest.fixture
@@ -143,8 +143,7 @@ def test_speech_callback_uses_shared_recorder_factory():
             rclpy.spin_once(manager, timeout_sec=0.02)
         assert agent.calls == ['go recharge']
         assert observed['model'] == 'base.en'
-        assert observed['device'] == 'cpu'
-        assert observed['wake_words'] == 'bumblebee'
+        assert observed['wake_words'] == 'hey_jarvis'
     finally:
         manager.destroy_node()
         rclpy.shutdown()

@@ -8,20 +8,25 @@ services:
     ipc: host
     stdin_open: true
     tty: true
+    # Audio: the sound card is passed through directly (/dev/snd), and apps talk to the
+    # host's PulseAudio/PipeWire server through its socket (see volumes below).
     devices:
       - /dev/snd:/dev/snd
+    group_add:
+      - audio            # lets the container user open /dev/snd
     volumes:
       - type: bind
         source: ../../ros2_ws
         target: /root/ros2_ws
 
-      # Connect to the host audio server
+      # Host audio server. The defaults match a normal desktop or Raspberry Pi OS login
+      # (user id 1000); override XDG_RUNTIME_DIR / HOME if yours differ.
       - type: bind
-        source: /run/user/1000/pulse/native
+        source: ${XDG_RUNTIME_DIR:-/run/user/1000}/pulse/native
         target: /tmp/pulse-native
         read_only: true
       - type: bind
-        source: /home/a/.config/pulse/cookie
+        source: ${HOME}/.config/pulse/cookie
         target: /tmp/pulse-cookie
         read_only: true
 
@@ -30,6 +35,6 @@ services:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
 
-      # Tell audio applications how to connect
+      # Tell audio applications how to reach the host audio server
       - PULSE_SERVER=unix:/tmp/pulse-native
       - PULSE_COOKIE=/tmp/pulse-cookie
