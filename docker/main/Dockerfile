@@ -16,9 +16,10 @@ RUN apt update && \
         python3-dev \
         build-essential \
         portaudio19-dev \
+        libportaudio2 \
         libsndfile1 \
         libasound2-plugins \
-        pulseaudio-utils \        
+        pulseaudio-utils \
         libgomp1 \
         alsa-utils \
     	libpcl-dev \
@@ -37,16 +38,16 @@ RUN apt update && \
     && rm -rf /var/lib/apt/lists/*
 
 
-# Install voice dependencies using ROS Humble's system Python.
+# Voice dependencies (Raspberry Pi stack, see requirements-voice.txt).
 COPY ros2_ws/src/qwen_voice_manager/requirements-voice.txt /tmp/requirements-voice.txt
 
-RUN python3 -m pip install --no-cache-dir \
-        torch==2.5.1 torchaudio==2.5.1 \
-        --index-url https://download.pytorch.org/whl/cpu \
-    && python3 -m pip install --no-cache-dir \
-        -r /tmp/requirements-voice.txt
-        
-# Route ALSA applications, including PyAudio, through the host audio server.
+RUN python3 -m pip install --no-cache-dir -r /tmp/requirements-voice.txt \
+    # openWakeWord goes in without deps: it declares tflite-runtime, which we do not use.
+    && python3 -m pip install --no-cache-dir --no-deps openwakeword==0.6.0 \
+    # Fetch the wake-word and VAD models now, so the robot needs no internet at first start.
+    && python3 -c "import openwakeword; openwakeword.utils.download_models()"
+
+# Route ALSA applications through the host audio server.
 RUN printf '%s\n' \
     'pcm.!default { type pulse }' \
     'ctl.!default { type pulse }' \
