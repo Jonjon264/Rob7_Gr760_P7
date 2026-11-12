@@ -23,6 +23,8 @@ class ReachPublisher(Node):
 
         self.goal_reached_publisher = self.create_publisher(
             std_msgs.msg.Bool, '/robot/goal_reached',10)
+        self.delivery_goal_reached_publisher = self.create_publisher(
+            std_msgs.msg.Bool, '/robot/delivery_goal_reached',10)
         
         self.goal_publisher = self.create_publisher(
             MoveBaseActionGoal, '/move_base/goal', 10)
@@ -156,6 +158,9 @@ class ReachPublisher(Node):
             reached_msg = std_msgs.msg.Bool()
             reached_msg.data = True
             self.goal_reached_publisher.publish(reached_msg)
+            if self.delivery_point:
+                self.delivery_goal_reached_publisher.publish(reached_msg)
+
             if self.current_wait_time > 0:
                 self.stop_stepping()
                 self.get_logger().info(

@@ -37,6 +37,8 @@ RUN rosdep update
 
 # Auto-source ROS
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
+RUN echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc
+
 
 WORKDIR /root/ros2_ws
 
