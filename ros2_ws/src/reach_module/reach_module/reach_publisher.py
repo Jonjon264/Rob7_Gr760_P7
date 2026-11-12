@@ -1,21 +1,12 @@
+import uuid
 import rclpy
 import std_msgs.msg
 from rclpy.node import Node
 from collections import deque
-from actionlib_msgs.msg import GoalStatus, GoalID
 from interfaces.msg import GoalArray
-from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseActionResult
+from move_base_msgs.msg import MoveBaseActionGoal
 import socket
 import struct
-
-# Statuses that mean "move_base is done with this goal"
-TERMINAL = {
-    GoalStatus.PREEMPTED,   # 2
-    GoalStatus.SUCCEEDED,   # 3
-    GoalStatus.ABORTED,     # 4
-    GoalStatus.REJECTED,    # 5
-    GoalStatus.RECALLED,    # 8
-}
 
 MOTION_HOST = ('192.168.137.103', 43893)
 
@@ -30,35 +21,43 @@ class ReachPublisher(Node):
     def __init__(self) -> None:
         super().__init__('reach_publisher')
 
+        self.goal_reached_publisher = self.create_publisher(
+            std_msgs.msg.Bool, '/robot/goal_reached',10)
+        
         self.goal_publisher = self.create_publisher(
             MoveBaseActionGoal, '/move_base/goal', 10)
-        self.cancel_publisher = self.create_publisher(
-            GoalID, '/move_base/cancel', 10)
+        
         self.create_subscription(
             GoalArray, '/robot/goals', self.goal_callback, 10)
-        # self.create_subscription(
-        #     MoveBaseActionResult, '/move_base/result', self.result_callback, 10)
+        
         self.create_subscription(
             std_msgs.msg.String, '/robot/cancel', self.cancel_callback, 10)
+        
         self.create_subscription(
             std_msgs.msg.Int32, '/planner_status', self.planner_status_callback, 10)
+        
+        self.create_subscription(
+            std_msgs.msg.Bool, '/robot/continue', self.continue_callback, 10)
+
+        self.create_subscription(
+            std_msgs.msg.Int32, '/robot_basic_state', self.basic_state_callback, 10)
+        
         self.queue = deque()
         self.current_id = None
-        self.cancel_current = False
         self.current_wait_time = 0
         self.wait_timer = None
-        self.last_planner_status = None
         self.armed = False
+        self.delivery_point = False
+        self.awaiting_continue_signal = False
 
         # UDP link to the motion host
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.stepping = False   # our best guess of the robot's state
-        self.create_timer(0.2, self.send_heartbeat)   # 5 Hz, above the 2 Hz minimum
-        self.send_simple_command(CMD_CONFIRM_CONN)    # confirm connection once
+        self.stepping = False 
+        self.create_timer(0.2, self.send_heartbeat)
+        self.send_simple_command(CMD_CONFIRM_CONN)
 
-    """UDP stream commands"""
+    #UDP stream commands
     def send_simple_command(self, code: int, value: int = 0) -> None:
-        # CommandHead: code, parameters_size, type (simple command => 0), little endian
         packet = struct.pack('<III', code, value, 0)
         try:
             self.sock.sendto(packet, MOTION_HOST)
@@ -70,7 +69,6 @@ class ReachPublisher(Node):
 
     def toggle_stepping(self) -> None:
         self.send_simple_command(CMD_TOGGLE_STEPPING)
-        self.stepping = not self.stepping
         self.get_logger().info(
             f'Stepping {"started" if self.stepping else "stopped"}')
 
@@ -87,7 +85,13 @@ class ReachPublisher(Node):
         self.toggle_stepping()
 
 
-    """Robot commands"""
+    #Robot commands
+    def basic_state_callback(self, msg: std_msgs.msg.Int32) -> None:
+        if msg.data == 4:  # stepping
+            self.stepping = True
+        elif msg.data == 3:  # not stepping
+            self.stepping = False
+
     def goal_callback(self, message: GoalArray) -> None:
 
         if not message.goals:
@@ -101,29 +105,30 @@ class ReachPublisher(Node):
             self.send_next()
 
     def send_next(self) -> None:
-
+        self.armed = False
         if not self.queue:
             self.current_id = None
             self.get_logger().info('All goals completed')
             self.stop_stepping()
             return
         
-        self.start_stepping()
         goal = self.queue.popleft()
 
         if not goal.goalid:
             self.get_logger().warn('Goal has no id, skipping')
             self.send_next()
             return
-
+        
+        self.start_stepping()
         self.current_wait_time = goal.wait_time
-
+        self.delivery_point = goal.delivery_point
         msg = MoveBaseActionGoal()
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = "map"
 
         self.current_id = goal.goalid
-        msg.goal_id.id = self.current_id
+        self.current_id_random = f'{self.current_id}_{uuid.uuid4().hex[:8]}'       
+        msg.goal_id.id = self.current_id_random
         #msg.goal_id.stamp = msg.header.stamp
 
         msg.goal.target_pose.header.frame_id = "map"
@@ -140,56 +145,57 @@ class ReachPublisher(Node):
             f'Sent goal {self.current_id} ({len(self.queue)} remaining)')
 
 
-
     def planner_status_callback(self, msg: std_msgs.msg.Int32) -> None:
-        if self.current_id is None or self.wait_timer is not None:
+        if self.current_id is None or self.wait_timer is not None or self.awaiting_continue_signal:
             return
         if msg.data != REACHED:
             self.armed = True            # saw "not reached" since the goal was sent
         elif self.armed:
             self.armed = False
-            self.handle_result(GoalStatus.SUCCEEDED, '')
-
-    def handle_result(self, status, text) -> None:
-        if status == GoalStatus.SUCCEEDED:
             self.get_logger().info(f'Goal {self.current_id} reached')
+            reached_msg = std_msgs.msg.Bool()
+            reached_msg.data = True
+            self.goal_reached_publisher.publish(reached_msg)
             if self.current_wait_time > 0:
                 self.stop_stepping()
                 self.get_logger().info(
                     f'Waiting {self.current_wait_time}s before next goal')
                 self.wait_timer = self.create_timer(
                     float(self.current_wait_time), self.wait_done)
+            elif self.delivery_point:
+                self.stop_stepping()
+                self.awaiting_continue_signal = True
+                self.get_logger().info(
+                    f'Waiting for continue signal before next goal')
             else:
                 self.send_next()
-        else:
-            self.get_logger().error(
-                f'Goal {self.current_id} failed ({status}): {text}. '
-                f'Aborting remaining goals.')
-            self.queue.clear()
-            self.current_id = None
+
+    def continue_callback(self, msg: std_msgs.msg.Bool) -> None:
+        if not msg.data:
+            return
+        if self.wait_timer is None and not self.awaiting_continue:
+            self.get_logger().warn('Continue received but not waiting, ignoring')
+            return
+        self.wait_done()
+            
 
     def wait_done(self) -> None:
-        self.start_stepping()
-        self.destroy_timer(self.wait_timer)   # makes it one-shot
-        self.wait_timer = None
+        if self.wait_timer is not None:
+            self.destroy_timer(self.wait_timer)
+            self.wait_timer = None
+        self.awaiting_continue_signal = False
         self.send_next()
 
     def cancel_callback(self, message: std_msgs.msg.String) -> None:
-
-        if self.wait_timer is not None:      # goal already done, we're just waiting
-            self.destroy_timer(self.wait_timer)
-            self.wait_timer = None
-            self.get_logger().info(f'Cancelled wait after goal {message.data}')
-            self.send_next()
-            return
-        
         if message.data == self.current_id:
+            if self.wait_timer is not None:
+                self.destroy_timer(self.wait_timer)
+                self.wait_timer = None
+                self.get_logger().info(f'Cancelled wait after goal {message.data}')
+                self.send_next()
+                return
             self.get_logger().info(f'Cancelling current goal {message.data}')
-            self.cancel_current = True #Comment out if not connected to robot
-            cancel_msg = GoalID()
-            cancel_msg.id = self.current_id
-            self.cancel_publisher.publish(cancel_msg)
-            self.send_next() #Comment out if connected to robot
+            self.send_next()
             return
         
         for goal in self.queue:
@@ -207,8 +213,8 @@ def main(args=None) -> None:
     try:
         rclpy.spin(node)
     finally:
-        node.destroy_node()
-        rclpy.shutdown()
+        if node.stepping:
+            node.send_simple_command(CMD_TOGGLE_STEPPING)
         node.sock.close()
         node.destroy_node()
         rclpy.shutdown()

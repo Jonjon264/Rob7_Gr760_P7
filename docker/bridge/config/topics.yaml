@@ -66,3 +66,7 @@ topics:
     topic: /planner_status
     type: std_msgs/msg/Int32
     queue_size: 10
+  - 
+    topic: /robot_basic_state
+    type: std_msgs/msg/Int32
+    queue_size: 10

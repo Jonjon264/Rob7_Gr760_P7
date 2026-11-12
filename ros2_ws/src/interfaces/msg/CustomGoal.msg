@@ -1,3 +1,4 @@
 string goalid
 int16 wait_time
+bool delivery_point
 geometry_msgs/PoseStamped goal
