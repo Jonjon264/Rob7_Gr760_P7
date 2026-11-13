@@ -14,9 +14,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-geometry-msgs \
     ros-noetic-actionlib-msgs \
     ros-noetic-move-base-msgs \
+    ros-noetic-map-msgs \
+    ros-noetic-nav-msgs \
     ros-foxy-actionlib-msgs \
     ros-foxy-geometry-msgs \
     ros-foxy-rmw-cyclonedds-cpp \
+    ros-foxy-map-msgs \
+    ros-foxy-nav-msgs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --depth 1 https://github.com/Livox-SDK/livox_ros_driver2.git /tmp/livox

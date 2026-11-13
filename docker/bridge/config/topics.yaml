@@ -3,22 +3,6 @@ topics:
     topic: /cmd_vel
     type: geometry_msgs/msg/Twist
     queue_size: 10
-  # -
-  #   topic: /livox/imu_192_168_2_202
-  #   type: sensor_msgs/msg/Imu
-  #   queue_size: 10
-  # -
-  #   topic: /livox/imu_192_168_2_203
-  #   type: sensor_msgs/msg/Imu
-  #   queue_size: 10
-  # -
-  #   topic: /livox/imu_192_168_2_204
-  #   type: sensor_msgs/msg/Imu
-  #   queue_size: 10
-  # -
-  #   topic: /livox/imu_192_168_2_205
-  #   type: sensor_msgs/msg/Imu
-  #   queue_size: 10
   -
     topic: /lidar_points
     type: sensor_msgs/msg/PointCloud2
@@ -34,10 +18,6 @@ topics:
     qos:
       history: keep_all
       durability: transient_local
-  # -
-  #   topic: /livox/lidar
-  #   type: livox_ros_driver2/msg/CustomMsg
-  #   queue_size: 10
   - 
     topic: /move_base/goal
     type: move_base_msgs/msg/MoveBaseActionGoal
@@ -69,4 +49,20 @@ topics:
   - 
     topic: /robot_basic_state
     type: std_msgs/msg/Int32
+    queue_size: 10
+  - 
+    topic: /move_base/global_costmap/costmap
+    type: nav_msgs/msg/OccupancyGrid
+    queue_size: 10
+  -
+    topic: /move_base/global_costmap/costmap_updates
+    type: map_msgs/msg/OccupancyGridUpdate
+    queue_size: 10
+  -
+    topic: /move_base/current_goal
+    type: geometry_msgs/msg/PoseStamped
+    queue_size: 10
+  - 
+    topic: /move_base/GlobalPlanner/plan
+    type: nav_msgs/msg/Path
     queue_size: 10
