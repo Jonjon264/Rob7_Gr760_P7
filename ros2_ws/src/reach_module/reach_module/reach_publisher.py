@@ -8,7 +8,7 @@ from move_base_msgs.msg import MoveBaseActionGoal
 import socket
 import struct
 
-MOTION_HOST = ('192.168.137.103', 43893)
+MOTION_HOST = ('192.168.1.103', 43893)
 
 CMD_HEARTBEAT      = 0x31040001
 CMD_CONFIRM_CONN   = 0x31020001
