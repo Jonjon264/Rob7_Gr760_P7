@@ -1,4 +1,8 @@
-"""Play reply strings with Piper, independently of model and ROS callbacks."""
+"""Speak replies aloud with Piper (text to speech), independently of model and ROS callbacks.
+
+PiperAudio wraps the Piper voice and the sound device; ReplyPlayer queues text and
+plays it on a worker thread so ROS callbacks never block on audio.
+"""
 
 import logging
 import os

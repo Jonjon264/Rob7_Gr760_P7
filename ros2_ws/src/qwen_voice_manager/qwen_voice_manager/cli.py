@@ -2,29 +2,24 @@
 
     wake word -> speech -> Whisper -> Qwen -> printed commands and reply
 
-The ROS node (qwen_voice_manager/node.py) does the same with the real robot.
+Run with `ask_qwen`. The ROS node (node.py) does the same on the real robot.
 """
 
 import json
 
-
-def handle_reply(reply):
-    """Called with the human-facing reply text; here we just print it."""
-    if reply:
-        print(f"Reply: {reply}")
+from .agent import QwenAgent
+from .recorder import PiRecorder
 
 
 def main():
-    from pi_recorder import PiRecorder
-    from qwen_agent import QwenAgent
-
     agent = QwenAgent()
 
     def process_text(text):
         print(f"Transcribed: {text}")
         commands, reply = agent.ask(text)
         print(json.dumps(commands, indent=2))
-        handle_reply(reply)
+        if reply:
+            print(f"Reply: {reply}")
 
     print("Loading wake-word, VAD and Whisper models (please wait)...")
     recorder = PiRecorder(

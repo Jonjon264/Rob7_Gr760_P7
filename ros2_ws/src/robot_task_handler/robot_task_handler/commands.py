@@ -1,20 +1,32 @@
-"""Validate the transport contract before publishing any part of a request."""
+"""Parse and validate the manager's JSON before anything is published.
+
+parse_command() is all-or-nothing: if any task is invalid, ValueError is
+raised and nothing is published. Map membership is checked upstream by the
+Qwen agent; this layer only checks shape and number ranges.
+"""
 
 import json
 import math
 from dataclasses import dataclass
 from typing import List, Union
 
+MAX_WAIT_TIME = 32767  # CustomGoal.wait_time is an int16
 
+
+# ---------------------------------------------------------------- parsed commands
 @dataclass(frozen=True)
 class Goal:
+    """One stop. delivery_point waits for /robot/continue; otherwise wait_time seconds."""
     goal_id: str
     x: float
     y: float
+    wait_time: int = 0
+    delivery_point: bool = False
 
 
 @dataclass(frozen=True)
 class Teach:
+    """Add (add=True) or remove a named place."""
     place_id: str
     description: str
     add: bool
@@ -22,14 +34,22 @@ class Teach:
 
 @dataclass(frozen=True)
 class Cancel:
-    name: str = ''  # empty means cancel everything
+    """Cancel one goal by name; an empty name cancels everything."""
+    name: str = ''
+
+
+@dataclass(frozen=True)
+class Continue:
+    """The person confirmed they received the delivery."""
 
 
 @dataclass(frozen=True)
 class ManagerError:
+    """The manager could not interpret the request."""
     message: str
 
 
+# ---------------------------------------------------------------- field checks
 def _text(value, label):
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f'{label} must be a non-empty string')
@@ -37,6 +57,7 @@ def _text(value, label):
 
 
 def _coordinate(value):
+    # type() rather than isinstance() so True/False are not accepted as numbers.
     if type(value) not in (int, float):
         raise ValueError('coordinates must be finite numbers')
     try:
@@ -48,13 +69,21 @@ def _coordinate(value):
     return number
 
 
-def _require_fields(task, fields, label):
-    if set(task) != fields:
+def _require_fields(obj, fields, label):
+    """The object must contain exactly these keys, no more, no fewer."""
+    if set(obj) != fields:
         raise ValueError(f'{label} requires exactly: {sorted(fields)}')
 
 
+# ---------------------------------------------------------------- task parsers
 def _parse_reach(task):
-    _require_fields(task, {'action', 'destination'}, 'reach')
+    _require_fields(task, {'action', 'destination', 'wait_time', 'delivery_point'}, 'reach')
+    if type(task['delivery_point']) is not bool:
+        raise ValueError('delivery_point must be true or false')
+    wait_time = task['wait_time']
+    if type(wait_time) is not int or not 0 <= wait_time <= MAX_WAIT_TIME:
+        raise ValueError(f'wait_time must be a whole number of seconds from 0 to {MAX_WAIT_TIME}')
+
     destination = task['destination']
     if not isinstance(destination, dict):
         raise ValueError('reach destination must be an object')
@@ -63,6 +92,8 @@ def _parse_reach(task):
         goal_id=_text(destination['name'], 'destination name'),
         x=_coordinate(destination['x']),
         y=_coordinate(destination['y']),
+        wait_time=wait_time,
+        delivery_point=task['delivery_point'],
     )
 
 
@@ -77,9 +108,15 @@ def _parse_teach(task):
     )
 
 
+_TASK_PARSERS = {'reach': _parse_reach, 'teach': _parse_teach}
+
+
 def _parse_standalone(command):
-    """Cancel and error are interrupts, never part of a task list."""
+    """Cancel, continue and error are interrupts, never part of a task list."""
     action = command.get('action')
+    if action == 'continue':
+        _require_fields(command, {'action'}, 'continue')
+        return Continue()
     if action == 'cancel' and set(command) <= {'action', 'name'}:
         name = command.get('name', '')
         if not isinstance(name, str):
@@ -88,17 +125,15 @@ def _parse_standalone(command):
     if action == 'error':
         _require_fields(command, {'action', 'message'}, 'error')
         return ManagerError(_text(command['message'], 'error message'))
-    raise ValueError('only cancel and error may be standalone objects')
+    raise ValueError('only cancel, continue and error may be standalone objects')
 
 
-_TASK_PARSERS = {'reach': _parse_reach, 'teach': _parse_teach}
+# ---------------------------------------------------------------- entry point
+def parse_command(raw: str) -> Union[List[Goal], List[Teach], Cancel, Continue, ManagerError]:
+    """Parse the JSON string from manager/commands.
 
-
-def parse_command(raw: str) -> Union[List[Goal], List[Teach], Cancel, ManagerError]:
-    """Validate all tasks atomically; never drop unsupported steps.
-
-    The manager validates map membership. This transport layer checks shape
-    and numbers, without maintaining a second copy of the map.
+    A dict is a standalone command; a non-empty list is a task list of all
+    reach or all teach tasks (mixing is not supported yet).
     """
     command = json.loads(raw)
     if isinstance(command, dict):
