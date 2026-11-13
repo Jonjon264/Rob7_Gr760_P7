@@ -1,0 +1,68 @@
+topics:
+  -
+    topic: /cmd_vel
+    type: geometry_msgs/msg/Twist
+    queue_size: 10
+  -
+    topic: /lidar_points
+    type: sensor_msgs/msg/PointCloud2
+    queue_size: 10
+  -
+    topic: /tf
+    type: tf2_msgs/msg/TFMessage
+    queue_size: 10
+  -
+    topic: /tf_static
+    type: tf2_msgs/msg/TFMessage
+    queue_size: 1
+    qos:
+      history: keep_all
+      durability: transient_local
+  - 
+    topic: /move_base/goal
+    type: move_base_msgs/msg/MoveBaseActionGoal
+    queue_size: 10
+  - 
+    topic: /move_base/result
+    type: move_base_msgs/msg/MoveBaseActionResult
+    queue_size: 10
+  -
+    topic: /move_base/feedback
+    type: move_base_msgs/msg/MoveBaseActionFeedback
+    queue_size: 10
+  -
+    topic: /move_base/cancel
+    type: actionlib_msgs/msg/GoalID
+    queue_size: 10
+  -
+    topic: /move_base/status
+    type: actionlib_msgs/msg/GoalStatusArray
+    queue_size: 10
+  -
+    topic: /odom
+    type: nav_msgs/msg/Odometry
+    queue_size: 10
+  -
+    topic: /planner_status
+    type: std_msgs/msg/Int32
+    queue_size: 10
+  - 
+    topic: /robot_basic_state
+    type: std_msgs/msg/Int32
+    queue_size: 10
+  - 
+    topic: /move_base/global_costmap/costmap
+    type: nav_msgs/msg/OccupancyGrid
+    queue_size: 10
+  -
+    topic: /move_base/global_costmap/costmap_updates
+    type: map_msgs/msg/OccupancyGridUpdate
+    queue_size: 10
+  -
+    topic: /move_base/current_goal
+    type: geometry_msgs/msg/PoseStamped
+    queue_size: 10
+  - 
+    topic: /move_base/GlobalPlanner/plan
+    type: nav_msgs/msg/Path
+    queue_size: 10
