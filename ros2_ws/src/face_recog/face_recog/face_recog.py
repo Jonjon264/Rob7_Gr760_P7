@@ -105,4 +105,10 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 
+
+
+#Take Agent response 
+# either take new photo or call TTS
+# wait a few seconds 
+# If delivery successful, publish on /robot/Continue (Bool = True)
 #Publish på /robot/Continue (Bool = True)
