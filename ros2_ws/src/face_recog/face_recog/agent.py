@@ -41,7 +41,7 @@ class QwenAgent:
         self.model = MODEL
 
         # Define paths
-        self.people_dir = DEFAULT_CONFIG_DIR / "people"
+        self.people_dir = DEFAULT_CONFIG_DIR / "People"
         self.rules_file = DEFAULT_CONFIG_DIR / "rules.txt"
 
         # Load rules
