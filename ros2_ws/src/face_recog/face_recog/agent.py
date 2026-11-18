@@ -135,11 +135,11 @@ class QwenAgent:
             {
                 "type": "text",
                 "text": (
-                    "The following are reference images "
+                    "The following are reference images of people "
                     "organized into categories.\n"
                     "Each category is identified by its folder name.\n"
                     "Use these images as visual context when "
-                    "classifying future input images."
+                    "identifying people in future input images."
                 )
             }
         ]
@@ -171,15 +171,16 @@ class QwenAgent:
         return (
             self.rules
             + "\n\n"
-            + "Use the reference images to classify new images. "
-            + "Return your answer ONLY as valid JSON."
+            + "Use the reference images to identify people in new images. "
+            + "Return your answer ONLY as valid JSON with a boolean for the identification, "
+            "and a string to tell the person to get their package."
         )
 
     # --------------------------------------------------
     # Ask Qwen
     # --------------------------------------------------
 
-    def ask(self, image):
+    def ask(self, prompt, image):
 
         encoded_image = self.encode_input_image(image)
 
@@ -198,9 +199,13 @@ class QwenAgent:
                     {
                         "type": "text",
                         "text": (
-                            "Classify the people in this image "
-                            "using the reference categories.\n"
-                            "Return ONLY valid JSON."
+                            f"This is the prompt: {prompt}\n"
+                             "Does the person in the image match the name referenced in the prompt?\n"
+                             "If yes, return a JSON object with a boolean 'match' set to true and a string "
+                             "'message' telling the person to get their package.\n"
+                             "If no, return a JSON object with 'match' set to false and a string 'message' "
+                             "telling the mentioned person to step into frame."
+
                         )
                     },
                     {
