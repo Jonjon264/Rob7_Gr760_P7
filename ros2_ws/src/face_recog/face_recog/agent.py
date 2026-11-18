@@ -1,88 +1,226 @@
-"""QwenAgent: one spoken sentence in, validated robot commands out.
 
-Flow: text -> Qwen (rules.txt + map.json as system prompt) -> JSON -> validation.
-Only validated JSON ever leaves the agent. The spoken "reply" is split off first
-so it can never influence what the robot does.
+"""
+QwenAgent: image input -> Qwen -> JSON response.
+
+Flow:
+1. Load rules.txt at startup.
+2. Load reference images from four folders.
+3. Encode and store reference images in memory.
+4. Receive a new JPG image through ask().
+5. Send the image and reference context to Qwen.
+6. Return Qwen's JSON response.
 """
 
-import json
+import base64
+import mimetypes
 import os
-from pathlib import Path
+import json
 
+from pathlib import Path
 from openai import OpenAI
 
 from . import DEFAULT_CONFIG_DIR
-from .validation import ACTIONS, parse_json, split_reply, validate
 
-DEFAULT_BASE_URL = "silk-band-magazines-accessories.trycloudflare.comsilk-band-magazines-accessories.trycloudflare.com"
-DEFAULT_API_KEY = "saFWWqMsABwbUkSRFprYBEhnVPc4nQsrzhoU7E4Y5uw"  # QWEN_API_KEY env var overrides
+
+DEFAULT_BASE_URL = "LINK_ON_GOD"
+DEFAULT_API_KEY = "API_KEY_TRUST" 
 MAX_TOKENS = 265000
+MODEL = "qwen3-vl"
 
 
 class QwenAgent:
-    def __init__(
-        self,
-        base_url=DEFAULT_BASE_URL,
-        api_key=DEFAULT_API_KEY,
-        model="qwen3-vl",
-        retries=1,        # extra attempts after an invalid answer
-        map_file=None,
-        rules_file=None,
-        timeout=180,      # seconds per model request
-    ):
-        self.client = OpenAI(base_url=base_url, api_key=os.environ.get("QWEN_API_KEY", api_key), timeout=timeout)
-        self.model = model
-        self.retries = retries
-        self.map_file = Path(map_file) if map_file else DEFAULT_CONFIG_DIR / "map.json"
-        self.rules_file = Path(rules_file) if rules_file else DEFAULT_CONFIG_DIR / "rules.txt"
 
-    def _system_prompt(self, map_data):
-        """Fill the {map} and {actions} placeholders of rules.txt."""
-        rules = self.rules_file.read_text(encoding="utf-8-sig")
-        return (
-            rules.replace("{map}", json.dumps(map_data, indent=2))
-            .replace("{actions}", str(sorted(ACTIONS)))
+    def __init__(self):
+
+        # Initialize Qwen client
+        self.client = OpenAI(
+            base_url=DEFAULT_BASE_URL,
+            api_key=DEFAULT_API_KEY,
         )
 
-    def _complete(self, messages):
+        self.model = MODEL
+
+        # Define paths
+        self.people_dir = DEFAULT_CONFIG_DIR / "people"
+        self.rules_file = DEFAULT_CONFIG_DIR / "rules.txt"
+
+        # Load rules
+        with open(self.rules_file, "r", encoding="utf-8") as file:
+            self.rules = file.read()
+
+        # Load reference images at startup
+        self.people_images = self.load_image_folder(
+            self.people_dir
+        )
+
+        # Build reference context
+        self.reference_context = self.build_reference_context()
+
+        print("QwenAgent initialized.")
+
+        for folder, images in self.people_images.items():
+            print(f"  {folder}: {len(images)} images")
+
+    # --------------------------------------------------
+    # Encode reference images from disk
+    # --------------------------------------------------
+
+    @staticmethod
+    def encode_reference_image(image_path):
+
+        mime_type, _ = mimetypes.guess_type(image_path)
+
+        with open(image_path, "rb") as file:
+            encoded = base64.b64encode(
+                file.read()
+            ).decode("utf-8")
+
+        return f"data:{mime_type};base64,{encoded}"
+
+    # --------------------------------------------------
+    # Encode incoming JPG bytes
+    # --------------------------------------------------
+
+    @staticmethod
+    def encode_input_image(image):
+
+        encoded = base64.b64encode(
+            image
+        ).decode("utf-8")
+
+        return f"data:image/jpeg;base64,{encoded}"
+
+    # --------------------------------------------------
+    # Load reference image folders
+    # --------------------------------------------------
+
+    def load_image_folder(self, folder):
+
+        locations = {}
+
+        for location_folder in sorted(folder.iterdir()):
+
+            if not location_folder.is_dir():
+                continue
+
+            images = []
+
+            for image_path in sorted(location_folder.iterdir()):
+
+                if image_path.suffix.lower() not in [
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                    ".webp"
+                ]:
+                    continue
+
+                images.append({
+                    "path": image_path,
+                    "data": self.encode_reference_image(image_path)
+                })
+
+            if images:
+                locations[location_folder.name] = images
+
+        return locations
+
+    # --------------------------------------------------
+    # Build reference context
+    # --------------------------------------------------
+
+    def build_reference_context(self):
+
+        content = [
+            {
+                "type": "text",
+                "text": (
+                    "The following are reference images "
+                    "organized into categories.\n"
+                    "Each category is identified by its folder name.\n"
+                    "Use these images as visual context when "
+                    "classifying future input images."
+                )
+            }
+        ]
+
+        for folder_name, images in self.people_images.items():
+
+            content.append({
+                "type": "text",
+                "text": f"Reference category: {folder_name}"
+            })
+
+            for image in images:
+
+                content.append({
+                    "type": "image_url",
+                    "image_url": {
+                        "url": image["data"]
+                    }
+                })
+
+        return content
+
+    # --------------------------------------------------
+    # System prompt
+    # --------------------------------------------------
+
+    def system_prompt(self):
+
+        return (
+            self.rules
+            + "\n\n"
+            + "Use the reference images to classify new images. "
+            + "Return your answer ONLY as valid JSON."
+        )
+
+    # --------------------------------------------------
+    # Ask Qwen
+    # --------------------------------------------------
+
+    def ask(self, image):
+
+        encoded_image = self.encode_input_image(image)
+
+        messages = [
+            {
+                "role": "system",
+                "content": self.system_prompt()
+            },
+            {
+                "role": "user",
+                "content": self.reference_context
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": (
+                            "Classify the people in this image "
+                            "using the reference categories.\n"
+                            "Return ONLY valid JSON."
+                        )
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": encoded_image
+                        }
+                    }
+                ]
+            }
+        ]
+
         response = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
-            max_tokens=MAX_TOKENS,
             temperature=0,
+            max_tokens=MAX_TOKENS,
             stream=False,
-            # Qwen3 "thinks" for many seconds before answering by default; the rules
-            # already force a short JSON answer, so skip it. Servers that don't know
-            # this option ignore it.
-            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
         )
-        return response.choices[0].message.content
 
-    def ask(self, text):
-        """Return (validated commands, spoken reply) for one user sentence.
+        result = response.choices[0].message.content
 
-        On repeated invalid model output the commands are an "error" object.
-        """
-        # Re-read both files on every call so edits (e.g. teach) apply immediately.
-        #map_data = json.loads(self.map_file.read_text(encoding="utf-8-sig"))
-        messages = [
-            {"role": "system", "content": self._system_prompt(map_data)},
-            {"role": "user", "content": text},
-        ]
-        error = None
-        for _ in range(self.retries + 1):
-            reply = self._complete(messages)
-            try:
-                commands, spoken = split_reply(parse_json(reply))
-                return validate(commands, map_data), spoken
-            except (ValueError, KeyError, AttributeError) as e:
-                error = e
-                # Show the model its mistake and let it try again.
-                messages += [
-                    {"role": "assistant", "content": reply},
-                    {"role": "user", "content": f"Invalid output ({e}). Reply again with valid JSON only, following the rules."},
-                ]
-        return (
-            {"action": "error", "message": f"invalid model output: {error}"},
-            "I could not understand that request.",
-        )
+        return json.loads(result)
