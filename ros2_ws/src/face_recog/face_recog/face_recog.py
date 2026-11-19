@@ -1,6 +1,7 @@
+import os
+import sys
 import threading
 import time
-
 import cv2
 import rclpy
 from cv_bridge import CvBridge
@@ -10,6 +11,11 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Bool
 from std_msgs.msg import String
 from .agent import QwenAgent 
+from pathlib import Path
+
+tts_script = Path(os.path.expanduser("~ros2_ws/src/qwen_voice_manager/qwen_voice_manager/")).resolve().parent.parent
+sys.path.append(str(tts_script))
+
 from qwen_voice_manager.speaker import ReplyPlayer
 
 class GoalImageNode(Node):
