@@ -13,7 +13,7 @@ from std_msgs.msg import String
 from .agent import QwenAgent 
 from pathlib import Path
 
-tts_script = Path(os.path.expanduser("~ros2_ws/src/qwen_voice_manager/qwen_voice_manager/")).resolve().parent.parent
+tts_script = Path(os.path.expanduser("~/ros2_ws/src/qwen_voice_manager/qwen_voice_manager/")).resolve().parent.parent
 sys.path.append(str(tts_script))
 
 from qwen_voice_manager.speaker import ReplyPlayer
@@ -24,7 +24,7 @@ class GoalImageNode(Node):
         self.player = ReplyPlayer() 
         self.max_attempts = 5
         self.retry_delay = 5.0           # seconds between photos
-        self.delivery_confirmed_pub = self.create_publisher(Bool, 'delivery_confirmed', 10)
+        #self.delivery_person_seen_pub = self.create_publisher(Bool, 'delivery_person_seen', 10)
 
 
 
@@ -114,7 +114,8 @@ class GoalImageNode(Node):
 
                 if match:
                     self.get_logger().info(f'Match found: {response}')
-                    self.delivery_confirmed_pub.publish(Bool(data=True))
+                    
+                    # self.delivery_person_seen_pub.publish(Bool(data=True))
                     return                      # end process
 
                 self.get_logger().info(f'No match: {response}')
@@ -132,17 +133,17 @@ class GoalImageNode(Node):
         
 
 
-    def main(args=None):
-        rclpy.init(args=args)
-        node = GoalImageNode()
-        try:
-            rclpy.spin(node)
-        except KeyboardInterrupt:
-            pass
-        finally:
-            node.destroy_node()
-            node.player.close()
-            rclpy.shutdown()
+def main(args=None):
+    rclpy.init(args=args)
+    node = GoalImageNode()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.player.close()
+        node.destroy_node()
+        rclpy.shutdown()
 
 
 
