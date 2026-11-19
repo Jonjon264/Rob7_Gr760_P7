@@ -12,18 +12,21 @@ Flow:
 """
 
 import base64
+#from PIL import Image
+import io
 import mimetypes
-import os
+#import os
 import json
 
-from pathlib import Path
+
+#from pathlib import Path
 from openai import OpenAI
 
 from . import DEFAULT_CONFIG_DIR
 
 
-DEFAULT_BASE_URL = "LINK_ON_GOD"
-DEFAULT_API_KEY = "API_KEY_TRUST" 
+DEFAULT_BASE_URL = "LINK_TO_QWEN_API"
+DEFAULT_API_KEY = "API_KEY" 
 MAX_TOKENS = 265000
 MODEL = "qwen3-vl"
 
@@ -84,8 +87,17 @@ class QwenAgent:
     @staticmethod
     def encode_input_image(image):
 
+        
+        # Convert Pillow Image to JPEG bytes
+        buffer = io.BytesIO()
+        image.convert("RGB").save(buffer, format="JPEG")
+
+        # Get image bytes
+        image_bytes = buffer.getvalue()
+
+        # Encode to Base64
         encoded = base64.b64encode(
-            image
+            image_bytes
         ).decode("utf-8")
 
         return f"data:image/jpeg;base64,{encoded}"
