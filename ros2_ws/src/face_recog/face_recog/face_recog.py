@@ -28,8 +28,6 @@ class GoalImageNode(Node):
         self.max_attempts = 5
         self.retry_delay = 5.0           # seconds between photos
         #self.delivery_person_seen_pub = self.create_publisher(Bool, 'delivery_person_seen', 10)
-        
-        self.player.__init__()
 
 
 
@@ -122,7 +120,7 @@ class GoalImageNode(Node):
                 response = str(reply["message"])
 
                 # Speak whatever the agent said (greeting or "please step into frame")
-                self.player.submit(response)
+                self.player.submit(str(response))
 
                 if match:
                     self.get_logger().info(f'Match found: {response}')
