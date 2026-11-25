@@ -2,9 +2,8 @@ import os
 import sys
 import threading
 import time
-import cv2
 import rclpy
-from cv_bridge import CvBridge
+
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
@@ -59,14 +58,9 @@ class GoalImageNode(Node):
     def encode_latest_frame(self):
         if self.latest_image is None:
             return None
-        frame = self.bridge.imgmsg_to_cv2(self.latest_image, desired_encoding='bgr8')
-        if self.max_width and frame.shape[1] > self.max_width:
-            scale = self.max_width / frame.shape[1]
-            frame = cv2.resize(frame, None, fx=scale, fy=scale,
-                            interpolation=cv2.INTER_AREA)
-        ok, buf = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+        frame = self.latest_image
         
-        return buf.tobytes() if ok else None
+        return frame
 
     def goal_callback(self, msg):
         activated = msg.data and not self.last_goal
