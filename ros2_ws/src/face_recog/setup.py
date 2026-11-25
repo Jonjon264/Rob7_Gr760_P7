@@ -26,6 +26,7 @@ setup(
         'console_scripts': [
             'dummy = face_recog.dummy:main',
             'face_logic = face_recog.face_recog:main',
+            'pub_test = face_recog.Pub_Test:main',
         ],
     },
 )
