@@ -28,16 +28,15 @@ class GoalImageNode(Node):
 
 
         
-        self.declare_parameter('goal_topic', 'delivery_goal_reached')
+        self.declare_parameter('goal_topic', '/robot/delivery_goal_reached')
         self.declare_parameter('image_topic', '/camera/camera/color/image_raw')
         self.declare_parameter('Transcript_topic', 'manager/transcripts')
-        self.declare_parameter('max_image_width', 640)  # 0 = no resizing
-        self.declare_parameter('text_topic', 'manager/text') #check this
+        #self.declare_parameter('max_image_width', 640)  # not in use
 
         goal_topic = self.get_parameter('goal_topic').value
         image_topic = self.get_parameter('image_topic').value
         transcript_topic = self.get_parameter('Transcript_topic').value
-        self.max_width = self.get_parameter('max_image_width').value
+        #self.max_width = self.get_parameter('max_image_width').value
 
         
         self.agent = QwenAgent()
