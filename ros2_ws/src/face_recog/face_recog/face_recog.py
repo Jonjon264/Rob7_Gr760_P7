@@ -39,7 +39,7 @@ class GoalImageNode(Node):
         transcript_topic = self.get_parameter('Transcript_topic').value
         self.max_width = self.get_parameter('max_image_width').value
 
-        self.bridge = CvBridge()
+        
         self.agent = QwenAgent()
         self.latest_image = None
         self.last_goal = False
