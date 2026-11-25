@@ -41,6 +41,9 @@ RUN apt update && \
 # Voice dependencies (Raspberry Pi stack, see requirements-voice.txt).
 COPY ros2_ws/src/qwen_voice_manager/requirements-voice.txt /tmp/requirements-voice.txt
 
+    # Install Pillow for image processing (used by face_recog).
+RUN pip install --no-cache-dir Pillow
+
 RUN python3 -m pip install --no-cache-dir -r /tmp/requirements-voice.txt \
     # openWakeWord goes in without deps: it declares tflite-runtime, which we do not use.
     && python3 -m pip install --no-cache-dir --no-deps openwakeword==0.6.0 \
