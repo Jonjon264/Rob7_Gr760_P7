@@ -25,8 +25,8 @@ from openai import OpenAI
 from . import DEFAULT_CONFIG_DIR
 
 
-DEFAULT_BASE_URL = "LINK_TO_QWEN_API"
-DEFAULT_API_KEY = "API_KEY" 
+DEFAULT_BASE_URL = "https://silk-band-magazines-accessories.trycloudflare.com/v1"
+DEFAULT_API_KEY = "4o5p5BXmiHPc5_RmWKnY7eAkdpSsnEpb37PQYSJiSDU" 
 MAX_TOKENS = 265000
 MODEL = "qwen3-vl"
 
@@ -216,7 +216,8 @@ class QwenAgent:
                              "If yes, return a JSON object with a boolean 'match' set to true and a string "
                              "'message' telling the person to get their package.\n"
                              "If no, return a JSON object with 'match' set to false and a string 'message' "
-                             "telling the mentioned person to step into frame."
+                             "telling the person mentioned in the prompt to step into frame.\n"
+                             "MAKE NO MISTAKES"
 
                         )
                     },
