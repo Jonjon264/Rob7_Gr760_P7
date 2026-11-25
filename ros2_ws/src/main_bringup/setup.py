@@ -27,6 +27,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'initial_pose_publisher = main_bringup.initial_pose:main',
         ],
     },
 )

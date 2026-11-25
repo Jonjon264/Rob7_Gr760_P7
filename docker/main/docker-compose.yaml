@@ -7,6 +7,7 @@ services:
     network_mode: host
     ipc: host
     stdin_open: true
+    restart: unless-stopped
     tty: true
     # Audio: the sound card is passed through directly (/dev/snd), and apps talk to the
     # host's PulseAudio/PipeWire server through its socket (see volumes below).
@@ -38,6 +39,15 @@ services:
       # Tell audio applications how to reach the host audio server
       - PULSE_SERVER=unix:/tmp/pulse-native
       - PULSE_COOKIE=/tmp/pulse-cookie
+    # command:
+    #   - bash
+    #   - -c
+    #   - |
+    #     set -e
+    #     source /opt/ros/humble/setup.bash
+    #     source /root/ros2_ws/install/setup.bash
+    #     exec ros2 launch main_bringup main_bringup.launch.py
+
   ros1_bridge:
     build:
       context: ../..
@@ -45,15 +55,15 @@ services:
     network_mode: host
     ipc: host
     environment:
-      - ROS_MASTER_URI=http://192.168.137.106:11311
-      - ROS_IP=192.168.137.2
+      - ROS_MASTER_URI=http://192.168.1.106:11311
+      - ROS_IP=192.168.1.113
       - ROS_DOMAIN_ID=0
     volumes:
       - ./config/topics.yaml:/topics.yaml:ro
       - type: bind
         source: ../../ros2_ws
         target: /root/ros2_ws
-    restart: no
+    restart: unless-stopped
     extra_hosts:
       - "ysc-perception:192.168.1.106"  
       - "ysc-perception:192.168.137.106"

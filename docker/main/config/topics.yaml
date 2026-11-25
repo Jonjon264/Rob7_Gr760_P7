@@ -66,3 +66,7 @@ topics:
     topic: /move_base/GlobalPlanner/plan
     type: nav_msgs/msg/Path
     queue_size: 10
+  -
+    topic: /initialpose
+    type: geometry_msgs/msg/PoseWithCovarianceStamped
+    queue_size: 10

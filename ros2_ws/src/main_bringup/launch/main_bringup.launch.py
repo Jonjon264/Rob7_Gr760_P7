@@ -54,6 +54,22 @@ def generate_launch_description():
             "rviz", default_value="true",
             description="Start RViz",
         ),
+
+        DeclareLaunchArgument(
+            "set_initial_pose", default_value="true",
+            description="Publish a pose to /initialpose on startup",
+        ),
+        DeclareLaunchArgument("initial_x", default_value="0.0"),
+        DeclareLaunchArgument("initial_y", default_value="0.0"),
+        DeclareLaunchArgument(
+            "initial_yaw", default_value="0.0",
+            description="Initial yaw in radians",
+        ),
+        DeclareLaunchArgument("initial_frame", default_value="map"),
+        DeclareLaunchArgument(
+            "initial_pose_delay", default_value="0.0",
+            description="Seconds to wait before publishing the initial pose",
+        ),
     ]
 
     qwen_launch_file = os.path.join(
@@ -86,6 +102,33 @@ def generate_launch_description():
         ],
     )
 
+    face_recog_node = Node(
+        package="face_recog",
+        executable="face_logic",
+        name="face_recog",
+        output="screen",
+        parameters=[
+            {"use_sim_time": use_sim_time}
+        ],
+    )
+
+    initial_pose_node = Node(
+        package="main_bringup",
+        executable="initial_pose_publisher",
+        name="initial_pose_publisher",
+        output="screen",
+        parameters=[
+            {"use_sim_time": use_sim_time},
+            {"x": LaunchConfiguration("initial_x")},
+            {"y": LaunchConfiguration("initial_y")},
+            {"yaw": LaunchConfiguration("initial_yaw")},
+            {"frame_id": LaunchConfiguration("initial_frame")},
+        ],
+        condition=IfCondition(LaunchConfiguration("set_initial_pose")),
+    )
+
+
+
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
@@ -106,11 +149,15 @@ def generate_launch_description():
         qwen_launch,
         reach_node,
         teach_node,
+        initial_pose_node,
     ])
+
+    
 
     return LaunchDescription([
         *declared_args,
         LogInfo(msg=["Starting bringup, use_sim_time=", use_sim_time]),
         robot_group,
+        #face_recog_node,
         rviz_node,
     ])
