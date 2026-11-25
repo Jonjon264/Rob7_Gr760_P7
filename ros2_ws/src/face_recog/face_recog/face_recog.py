@@ -28,6 +28,8 @@ class GoalImageNode(Node):
         self.max_attempts = 5
         self.retry_delay = 5.0           # seconds between photos
         #self.delivery_person_seen_pub = self.create_publisher(Bool, 'delivery_person_seen', 10)
+        
+        self.player.__init__()
 
 
 
