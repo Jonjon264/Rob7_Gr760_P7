@@ -24,7 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'dummy = face_recog.dummy:main'
+            'dummy = face_recog.dummy:main',
             'face_logic = face_recog.face_recog:main',
         ],
     },
