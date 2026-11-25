@@ -56,7 +56,7 @@ services:
     ipc: host
     environment:
       - ROS_MASTER_URI=http://192.168.1.106:11311
-      - ROS_IP=192.168.1.131
+      - ROS_IP=192.168.1.113
       - ROS_DOMAIN_ID=0
     volumes:
       - ./config/topics.yaml:/topics.yaml:ro
