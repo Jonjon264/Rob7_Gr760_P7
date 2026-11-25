@@ -93,8 +93,7 @@ class GoalImageNode(Node):
             return
         threading.Thread(target=self.agent_worker, args=(jpeg,), daemon=True).start()
 
-        # The model call can take up to the 180 s timeout, so run it in a thread;
-        # otherwise the executor would stall and stop processing camera frames
+
 
     def transcript_callback(self, msg):
         self.latest_transcript = msg.data
