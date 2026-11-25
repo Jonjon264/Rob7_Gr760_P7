@@ -25,7 +25,7 @@ from openai import OpenAI
 from . import DEFAULT_CONFIG_DIR
 
 
-DEFAULT_BASE_URL = "https://megalodon-one.taile614b1.ts.net/v1"
+DEFAULT_BASE_URL = "https://silk-band-magazines-accessories.trycloudflare.com/v1"
 DEFAULT_API_KEY = "PTFT-f_xrp9qFbb83vI_w5vFdmNaQDkE7F942Iuc5lk" 
 MAX_TOKENS = 265000
 MODEL = "qwen3-vl"
