@@ -120,7 +120,7 @@ class GoalImageNode(Node):
                 response = str(reply["message"])
 
                 # Speak whatever the agent said (greeting or "please step into frame")
-                #self.player.submit(response)
+                self.player.submit(response)
 
                 if match:
                     self.get_logger().info(f'Match found: {response}')
