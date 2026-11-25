@@ -3,7 +3,9 @@ import sys
 import threading
 import time
 import rclpy
+import io
 import base64
+from PIL import Image as PILImage
 
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
@@ -57,11 +59,27 @@ class GoalImageNode(Node):
         self.latest_image = msg
 
     def encode_latest_frame(self):
-        if self.latest_image is None:
+        msg = self.latest_image
+        if msg is None:
             return None
-        frame = self.latest_image
-        
-        return frame
+        try:
+            rawmode = {'rgb8': 'RGB', 'bgr8': 'BGR'}.get(msg.encoding)
+            if rawmode is None:
+                self.get_logger().error(f'Unsupported encoding: {msg.encoding}')
+                return None
+
+            img = PILImage.frombuffer(
+                'RGB', (msg.width, msg.height), bytes(msg.data),
+                'raw', rawmode, msg.step, 1)   # msg.step handles row padding
+
+            img.thumbnail((640, 640))          # optional: shrink for faster model calls
+
+            buf = io.BytesIO()
+            img.save(buf, format='JPEG', quality=80)
+            return base64.b64encode(buf.getvalue()).decode('utf-8')
+        except Exception as e:
+            self.get_logger().error(f'Frame encoding failed: {e}')
+            return None
 
     def goal_callback(self, msg):
         if not msg.data:
@@ -79,8 +97,7 @@ class GoalImageNode(Node):
         # otherwise the executor would stall and stop processing camera frames
 
     def transcript_callback(self, msg):
-
-        self.latest_transcript = base64.b64encode(msg.data).decode("utf-8")
+        self.latest_transcript = msg.data
         self.get_logger().info(f'Received text: {msg.data}')
         
 
