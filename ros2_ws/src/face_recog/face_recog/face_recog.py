@@ -3,6 +3,7 @@ import sys
 import threading
 import time
 import rclpy
+import base64
 
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
@@ -11,6 +12,7 @@ from std_msgs.msg import Bool
 from std_msgs.msg import String
 from .agent import QwenAgent 
 from pathlib import Path
+
 
 tts_script = Path(os.path.expanduser("~/ros2_ws/src/qwen_voice_manager/qwen_voice_manager/")).resolve().parent.parent
 sys.path.append(str(tts_script))
@@ -62,14 +64,12 @@ class GoalImageNode(Node):
         return frame
 
     def goal_callback(self, msg):
-        activated = msg.data and not self.last_goal
-        self.last_goal = msg.data
-        if not activated:
-            return
+        if not msg.data:
+            return                      # ignore False
         if self.latest_image is None:
             self.get_logger().warn('Goal reached but no image received yet')
             return
-        jpeg = self.encode_latest_frame()   # frame at the moment of the goal
+        jpeg = self.encode_latest_frame()
         if jpeg is None:
             self.get_logger().error('JPEG encoding failed')
             return
@@ -79,7 +79,8 @@ class GoalImageNode(Node):
         # otherwise the executor would stall and stop processing camera frames
 
     def transcript_callback(self, msg):
-        self.latest_transcript = msg.data
+
+        self.latest_transcript = base64.b64encode(msg.data).decode("utf-8")
         self.get_logger().info(f'Received text: {msg.data}')
         
 

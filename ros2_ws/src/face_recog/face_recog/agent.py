@@ -194,7 +194,7 @@ class QwenAgent:
 
     def ask(self, prompt, image):
 
-        encoded_image = self.encode_input_image(image)
+        #encoded_image = self.encode_input_image(image)
 
         messages = [
             {
@@ -224,7 +224,7 @@ class QwenAgent:
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": encoded_image
+                            "url": image
                         }
                     }
                 ]
