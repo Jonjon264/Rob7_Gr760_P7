@@ -16,24 +16,45 @@ def default_model_path():
 
 
 class PiperAudio:
-    def __init__(self, model_path, device=None):
+    def __init__(self, model_path, device=None, num_threads=1, gain=0.4):
         path = Path(model_path).expanduser().resolve()
-        if not path.is_file() or not Path(str(path) + '.json').is_file():
+        config_path = Path(str(path) + '.json')
+        if not path.is_file() or not config_path.is_file():
             raise FileNotFoundError(f'Piper model and companion .json required: {path}')
+
+        import json
         import numpy as np
+        import onnxruntime as ort
         import sounddevice as sd
         from piper import PiperVoice
+        from piper.config import PiperConfig
 
-        self.voice = PiperVoice.load(str(path))
+        sess_options = ort.SessionOptions()
+        sess_options.intra_op_num_threads = num_threads
+        sess_options.inter_op_num_threads = 1
+
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = PiperConfig.from_dict(json.load(f))
+
+        session = ort.InferenceSession(
+            str(path),
+            sess_options=sess_options,
+            providers=['CPUExecutionProvider'],
+        )
+
+        self.voice = PiperVoice(session=session, config=config)
         self.np = np
         self.sd = sd
         self.device = device
+        self.gain = gain
 
     def synthesize(self, text):
         audio = b''.join(chunk.audio_int16_bytes for chunk in self.voice.synthesize(text))
         return self.np.frombuffer(audio, dtype=self.np.int16), self.voice.config.sample_rate
 
     def play(self, data, sample_rate):
+        if self.gain != 1.0:
+            data = (data.astype(self.np.float32) * self.gain).astype(self.np.int16)
         self.sd.play(data, samplerate=sample_rate, device=self.device)
 
     def wait(self):
@@ -41,7 +62,6 @@ class PiperAudio:
 
     def stop(self):
         self.sd.stop()
-
 
 class ReplyPlayer:
     """submit() only queues text; one worker owns synthesis and playback.
