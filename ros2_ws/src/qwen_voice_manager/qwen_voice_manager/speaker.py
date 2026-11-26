@@ -12,7 +12,7 @@ import threading
 
 
 def default_model_path():
-    return os.path.expanduser('~/ros2_ws/config/piper/en_US-hfc_male-medium.onnx')
+    return os.path.expanduser('~/ros2_ws/config/piper/en_US-amy-low.onnx')
 
 
 class PiperAudio:
