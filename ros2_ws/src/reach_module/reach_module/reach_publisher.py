@@ -178,7 +178,7 @@ class ReachPublisher(Node):
     def continue_callback(self, msg: std_msgs.msg.Bool) -> None:
         if not msg.data:
             return
-        if self.wait_timer is None and not self.awaiting_continue:
+        if self.wait_timer is None and not self.awaiting_continue_signal:
             self.get_logger().warn('Continue received but not waiting, ignoring')
             return
         self.wait_done()
