@@ -51,7 +51,7 @@ def generate_launch_description():
             description="Namespace for the robot nodes",
         ),
         DeclareLaunchArgument(
-            "rviz", default_value="true",
+            "rviz", default_value="false",
             description="Start RViz",
         ),
 
@@ -150,6 +150,7 @@ def generate_launch_description():
         reach_node,
         teach_node,
         initial_pose_node,
+        face_recog_node,
     ])
 
     
@@ -158,6 +159,5 @@ def generate_launch_description():
         *declared_args,
         LogInfo(msg=["Starting bringup, use_sim_time=", use_sim_time]),
         robot_group,
-        #face_recog_node,
         rviz_node,
     ])
