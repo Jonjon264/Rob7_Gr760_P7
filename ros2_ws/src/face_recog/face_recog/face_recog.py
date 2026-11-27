@@ -117,7 +117,7 @@ class GoalImageNode(Node):
 
                 self.get_logger().info(f'Attempt {attempt}: {reply}')
                 match = reply["match"]
-                response = str(reply["response"])
+                response = str(reply["message"])
 
                 # Speak whatever the agent said (greeting or "please step into frame")
                 self.player.submit(response)
